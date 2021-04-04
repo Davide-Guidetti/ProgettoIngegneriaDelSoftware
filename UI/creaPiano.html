@@ -22,6 +22,7 @@
 	
 	<script>
 		function DefineShiftTable(jqeryHtmlContainerBox){
+			this.patt = /^Turno\s\d+/i; //default auto numbering pattern matching
 			this.defineShifts = []
 			this.jqeryHtmlContainerBox = jqeryHtmlContainerBox;
 			
@@ -43,6 +44,11 @@
 				}
 				this.defineShifts.push(o);
 				this.defineShifts.sort(function (a, b){return a.startTime.getDayMinute() - b.startTime.getDayMinute()});
+				for(let i=0; i<this.defineShifts.length; i++){ //give default names
+					if(this.defineShifts[i].name == "" || this.patt.test(this.defineShifts[i].name)){
+						this.defineShifts[i].name = "Turno " + i;
+					}
+				}
 				this.renderDefineShifts();
 				return true;
 			}
@@ -56,6 +62,11 @@
 				this.remove(index);
 				this.defineShifts.push(o);
 				this.defineShifts.sort(function (a, b){return a.startTime.getDayMinute() - b.startTime.getDayMinute()});
+				for(let i=0; i<this.defineShifts.length; i++){ //give default names
+					if(this.defineShifts[i].name == "" || this.patt.test(this.defineShifts[i].name)){
+						this.defineShifts[i].name = "Turno " + i;
+					}
+				}
 				this.renderDefineShifts()
 				return true;
 			}
@@ -99,7 +110,8 @@
 				let row;
 				table.append($('<tr>').html('<th>Nome turno</th><th>Inizio</th><th>Fine</th><th>Azioni</th>'));
 				
-				for(let i=0; i<this.defineShifts.length; i++){
+				let i;
+				for(i=0; i<this.defineShifts.length; i++){
 					row = $('<tr>').attr("shiftRowIndex", i);
 					let deleteBtn = $('<button type="button" class="btn btn-danger btn-sm mr-1" onClick="defineShiftTable.remove(' + i + ')">Elimina</button>');
 					let editBtn = $('<button type="button" class="btn btn-warning btn-sm mr-1" onClick="defineShiftTable.renderDefineShifts(' + i + ')">Modifica</button>');
@@ -117,7 +129,7 @@
 					table.append(row);
 				}
 				row = $('<tr>')
-				row.append($('<td>').html('<input type="text" placeholder="Turno 1" class="input-group mb-1">'));
+				row.append($('<td>').html('<input type="text" placeholder="Turno n" class="input-group mb-1">'));
 				row.append($('<td>').html('<input type="text" class="hour" placeholder="8"> : <input type="text" class="minute" placeholder="30">'));
 				row.append($('<td>').html('<input type="text" class="hour" placeholder="10"> : <input type="text" class="minute" placeholder="30">'));
 				row.append($('<td>').append(addBtn));
@@ -290,6 +302,12 @@
 			<h3>Turni:</h3>
 			<div id="shiftsTableCont"></div>
 		</div>
+		<hr>
+		<p>
+			<b>Nota:</b><br>
+			Se viene lasciato un nome vuoto gli verrà assegnato un valore del tipo "Turno &ltnumero lista&gt". <br>
+			Il numero di tutti i turni aventi questa forma vengno aggiornati con il numero di lista man mano che viene modificata
+		</p>
 
 		<br>
 		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica"><br>
