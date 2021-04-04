@@ -13,9 +13,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.it.min.js"></script>
 	
-	
-
-
 	<style>
 		#planPeriod .year {width: 2.5em;}
 		#planPeriod .month, #planPeriod .day, #planPeriod .minute, #planPeriod .hour {width: 1.5em;}
@@ -163,7 +160,7 @@
 				return this.hour.length!=0 && this.hour.hight!=0 && !isNaN(this.hour) && !isNaN(this.minute) && this.hour<24 && this.hour>=0 && this.minute<60 && this.minute>=0;
 			}
 			this.getDayMinute = function(){
-				return this.hour*60 + this.minute;
+				return Number(this.hour*60 + this.minute);
 			}
 			this.isBefore = function(timeOfDay){return this.getDayMinute() < timeOfDay.getDayMinute()}
 			this.isAfter = function(timeOfDay){return this.getDayMinute() > timeOfDay.getDayMinute()}
