@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<title>EmergercyApp</title>
+	<meta charset="utf-8">
+
+	<!-- script for usage of bootstrap, with jquery-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<style>
+	.tooltip-inner {
+		background-color: #FF0000; 
+		color: #FFFFFF; 
+		border: 1px solid black; 
+		padding: 5px;
+		font-size: 15px;
+	 }
+	</style>
+	
+	<script>
+		var defineTable;
+
+		var coordinators = ["coordinatore1", "coordinatore2"]; //QUI IL SERVER DEVE INSERIRE I COORDINATORI GIA' ESISTENTI
+		var defineCoordinatorsTable;
+
+		var volunteer = ["volunteer1", "volunteer2"]; //QUI IL SERVER DEVE INSERIRE I COORDINATORI GIA' ESISTENTI
+		var defineVolunteerTable;
+	
+		// ------------ DA IMPLEMENTARE: PARTE DI COMUNICAZIONE CON IL SERVER -------------------
+		
+		//a dire il vero qui c'è da dicedere quale approccio di interazione usare, cioè o si invia una richiesta ogni qual volta che si vuole eliminare o aggiungere un elemento,
+		// o si effettuanno tutte le modifiche del caso lato client e si invia la nuova lista server side. Sarà poi il server ad accorgersi che cosa è stato eliminato e cosa è stato aggiunto
+		// se si sceglie il primo approccio usare le prime 2 funzioni e eliminare la 3a e il pulsante applica
+		// se si sceglie il secondo eliminare le prime 2 funzioni e implemetare la terza
+		
+		function sendAddRequest(name){
+			console.log("sending add request for \"" + name + "\" to server");
+			//qui bisognerà inviare la richiesta di aggiunta al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
+			//defineCoordinatorsTable.Coordinators = nuovo_array_di_competenze
+			//defineCoordinatorsTable.renderCoordinatorsTable()
+		}
+		
+		function sendDeleteRequest(name){
+			console.log("sending delete request for \"" + name + "\" to server");
+			//qui bisognerà inviare la richiesta di eliminazione al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
+			//defineCoordinatorsTable.Coordinators = nuovo_array_di_competenze
+			//defineCoordinatorsTable.renderCoordinatorsTable()
+		}
+		
+		function sendNewList(list){
+			console.log("sending new list to server for to server");
+			console.log(list);
+			//qui bisognerà inviare la richiesta di aggiornamento al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
+			//defineCoordinatorsTable.Coordinators = nuovo_array_di_competenze
+			//defineCoordinatorsTable.renderCoordinatorsTable()
+		}
+		
+		// --------------------------------------------------------------------------------------
+
+		
+		//function definition table
+		function DefineTable(jqeryHtmlContainerBoxVolunteer,volunteer,jqeryHtmlContainerBoxCoordinators, coordinators){
+			this.defineVolunteerTable = volunteer;
+			this.jqeryHtmlContainerBoxVolunteer = jqeryHtmlContainerBoxVolunteer;
+			this.defineCoordinatorsTable = coordinators;
+			this.jqeryHtmlContainerBoxCoordinators = jqeryHtmlContainerBoxCoordinators;
+			
+			//promote an element
+			this.promote = function(index){
+				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE VOLTA PER L'AGGIUNTA E LA RIMOZIONE DI UNA COMPETENZA ----------------
+				let newDefineVolunteerTable = [];
+				for(let i=0; i<this.defineVolunteerTable.length; i++){
+					if(i!=index) {
+						newDefineVolunteerTable.push(this.defineVolunteerTable[i]);
+					}
+					else{
+						this.defineCoordinatorsTable.push(this.defineVolunteerTable[i]);
+					}
+				}
+				this.defineVolunteerTable = newDefineVolunteerTable;
+				this.renderCoordinatorsTable();
+				this.renderVolunteerTable();
+				//--------------------------------------------------------------------------------------------------------------------------------
+			}
+	
+			//downgrade an element
+			this.downgrade = function(index){
+				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE VOLTA PER L'AGGIUNTA E LA RIMOZIONE DI UNA COMPETENZA ----------------
+				let newDefineCoordinatorsTable = [];
+				for(let i=0; i<this.defineCoordinatorsTable.length; i++){
+					if(i!=index) {
+						newDefineCoordinatorsTable.push(this.defineCoordinatorsTable[i]);
+					}
+					else{
+						this.defineVolunteerTable.push(this.defineCoordinatorsTable[i]);
+					}
+				}
+				this.defineCoordinatorsTable = newDefineCoordinatorsTable;
+				this.renderCoordinatorsTable();
+				this.renderVolunteerTable();
+				//--------------------------------------------------------------------------------------------------------------------------------
+			}
+
+			//displays the list of elements in table
+			this.renderVolunteerTable = function(){		
+				let table = $('<table class="col-lg-3 col-sm-4">');
+				let row;
+				table.append($('<tr>').html('<th>Nome volontari</th><th>Azione</th>'));
+				
+				console.log("Volunteer:");
+				for(let i=0; i<this.defineVolunteerTable.length; i++){
+					console.log(this.defineVolunteerTable[i]);
+					row = $('<tr>').attr("elementRowIndex", i);
+					let promoteBtn = $('<button type="button" class="btn btn-secondary btn-success btn-sm mr-1" onClick="defineTable.promote(' + i + ')">Promuovi</button>');
+					row.append($('<td>').text(this.defineVolunteerTable[i]));
+					row.append($('<td>').append(promoteBtn));
+					table.append(row);
+				}
+
+				this.jqeryHtmlContainerBoxVolunteer.html(table);
+				table.click(function(event){
+					event.stopPropagation();
+				});
+
+				
+			}
+
+			//displays the list of elements in table
+			this.renderCoordinatorsTable = function(){
+				let table = $('<table class="col-lg-3 col-sm-4">');
+				let row;
+				table.append($('<tr>').html('<th>Nome coordinatore</th><th>Azione</th>'));
+				
+				console.log("Coordinators:");
+				for(let i=0; i<this.defineCoordinatorsTable.length; i++){
+					console.log(this.defineCoordinatorsTable[i]);
+					row = $('<tr>').attr("elementRowIndex", i);
+					let downgradeBtn = $('<button type="button" class="btn btn-secondary btn-danger btn-sm mr-1" onClick="defineTable.downgrade(' + i + ')">Declassa</button>');
+					row.append($('<td>').text(this.defineCoordinatorsTable[i]));
+					row.append($('<td>').append(downgradeBtn));
+					table.append(row);
+				}
+
+				this.jqeryHtmlContainerBoxCoordinators.html(table);
+				table.click(function(event){
+					event.stopPropagation();
+				});
+				
+			}
+		}
+		
+		
+		//define table
+		$(document).ready(function(){
+			
+			//nome comitato selezionato in precedenza dall'amministratore
+			$("#Comitato").html("<h2><b>COMITATO X</b></h2>");
+
+			//deinisco le liste dei volontari e dei coordinatori
+			defineTable = new DefineTable($("#VolunteerTableCont"),volunteer,$("#CoordinatorsTableCont"),coordinators);
+			defineTable.renderVolunteerTable();
+			defineTable.renderCoordinatorsTable();
+
+			$("#Management").submit(function(e){
+				volunteer = defineTable.defineVolunteerTable;
+				coordinators = defineTable.defineCoordinatorsTable;
+
+				sendNewList(volunteer);
+				sendNewList(coordinators);
+				e.preventDefault();
+				return false;
+			});
+		});
+		
+		
+		
+		
+	</script>
+</head>
+<body>
+	<!-- Title -->
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<h1>EmergercyApp</h1>
+		<!--<p></p> -->
+	</div>
+
+	<!-- navbar-->
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="#">Gestione coordinatori</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+			<a class="nav-link" href="#">Gestione competenze</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" href="#">Gestione comitati</a>
+			</li>
+		</ul>
+		</div>  
+	</nav>
+	<br>
+	<form id="Management" class="container" style="margin-top:30px" >
+		<div id="Comitato"></div>
+		<br>
+		<div id="CoordinatorsTableCont"></div>
+		<br>
+		<div id="VolunteerTableCont"></div>
+		<br>
+		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica"><br>
+	</form>
+
+	<!--footer-->
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<h2>Footer</h2>
+	</div>
+	  
+	
+</body>
+</html>
