@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<title>EmergercyApp</title>
+	<meta charset="utf-8">
+
+	<!-- script for usage of bootstrap, with jquery-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<style>
+	.tooltip-inner {
+		background-color: #FF0000; 
+		color: #FFFFFF; 
+		border: 1px solid black; 
+		padding: 5px;
+		font-size: 15px;
+	 }
+	</style>
+	
+	<script>
+		var Skills = ["competenza1", "competenza2"]; //QUI IL SERVER DEVE INSERIRE LE COMPETENZE GIA' ESISTENTI
+		var defineSkillsTable;
+	
+		// ------------ DA IMPLEMENTARE: PARTE DI COMUNICAZIONE CON IL SERVER -------------------
+		
+		//a dire il vero qui c'è da dicedere quale approccio di interazione usare, cioè o si invia una richiesta ogni qual volta che si vuole eliminare o aggiungere un elemento,
+		// o si effettuanno tutte le modifiche del caso lato client e si invia la nuova lista server side. Sarà poi il server ad accorgersi che cosa è stato eliminato e cosa è stato aggiunto
+		// se si sceglie il primo approccio usare le prime 2 funzioni e eliminare la 3a e il pulsante applica
+		// se si sceglie il secondo eliminare le prime 2 funzioni e implemetare la terza
+		
+		function sendAddRequest(name){
+			console.log("sending add request for \"" + name + "\" to server");
+			//qui bisognerà inviare la richiesta di aggiunta al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
+			//defineSkillsTable.Skills = nuovo_array_di_competenze
+			//defineSkillsTable.renderSkillsTable()
+		}
+		
+		function sendDeleteRequest(name){
+			console.log("sending delete request for \"" + name + "\" to server");
+			//qui bisognerà inviare la richiesta di eliminazione al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
+			//defineSkillsTable.Skills = nuovo_array_di_competenze
+			//defineSkillsTable.renderSkillsTable()
+		}
+		
+		function sendNewList(list){
+			console.log("sending new list to server for to server");
+			console.log(list);
+			//qui bisognerà inviare la richiesta di aggiornamento al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
+			//defineSkillsTable.Skills = nuovo_array_di_competenze
+			//defineSkillsTable.renderSkillsTable()
+		}
+		
+		// --------------------------------------------------------------------------------------
+
+		function DefineSkillsTable(jqeryHtmlContainerBox, Skills){
+			this.defineSkillsTable = Skills;
+			this.jqeryHtmlContainerBox = jqeryHtmlContainerBox;
+			
+			//remove an element
+			this.remove = function(index){
+				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE L'INTERA LISTA SOLO QUANDO SI CLICCA SU APPLICA ----------------
+				let TrElem = this.jqeryHtmlContainerBox.find("tr[elementRowIndex=" + index + "]");
+				let name = TrElem.children().text(); //first td elemnt of table, and first and only elment of this cell witch is the input field for element name
+				sendDeleteRequest(name);
+				//-----------------------------------------------------------------------------------------------------------------------------
+				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE VOLTA PER L'AGGIUNTA E LA RIMOZIONE DI UNA COMPETENZA ----------------
+				let newDefineSkillsTable = [];
+				for(let i=0; i<this.defineSkillsTable.length; i++){
+					if(i!=index) newDefineSkillsTable.push(this.defineSkillsTable[i]);
+				}
+				this.defineSkillsTable = newDefineSkillsTable;
+				this.renderSkillsTable();
+				//--------------------------------------------------------------------------------------------------------------------------------
+			}
+			//add an element
+			this.add = function(name){
+				for(let i=0; i<this.defineSkillsTable.length; i++){
+					if(name == this.defineSkillsTable[i]){
+						return false;
+					}
+				}
+				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE L'INTERA LISTA SOLO QUANDO SI CLICCA SU APPLICA ----------------
+				sendAddRequest(name);
+				//-----------------------------------------------------------------------------------------------------------------------------
+				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE VOLTA PER L'AGGIUNTA E LA RIMOZIONE DI UNA COMPETENZA ----------------
+				this.defineSkillsTable.push(name);
+				this.renderSkillsTable();
+				//--------------------------------------------------------------------------------------------------------------------------------
+				return true;
+			}
+			//displays the list of elements in table
+			this.renderSkillsTable = function(){
+				let addBtn = $('<button type="button" class="btn btn-secondary btn-success btn-sm mr-1">Aggiungi</button>');
+				addBtn.click(function(){
+					$("#errorDisplay").text("");
+					$("#newElementInput").tooltip('hide');
+					let TrElem = $(this).parent().parent();
+					let name = TrElem.children().eq(0).children().eq(0).val(); //first td elemnt of table, and first and only elment of this cell witch is the input field for element name
+					if(name == ""){
+						$("#errorDisplay").text("Inserire un nome per la competenza");
+						$("#newElementInput").attr('data-original-title', "Inserire un nome").tooltip('show');
+						return;
+					}
+					if(defineSkillsTable.add(name) == false){
+						$("#errorDisplay").text("La competenza esiste già!");
+						$("#newElementInput").attr('data-original-title', "La competenza esiste già!").tooltip('show');
+						return;
+					}
+				});
+				
+				let table = $('<table>');
+				let row;
+				table.append($('<tr>').html('<th>Nome competenza</th><th>Azione</th>'));
+				
+				for(let i=0; i<this.defineSkillsTable.length; i++){
+					row = $('<tr>').attr("elementRowIndex", i);
+					let deleteBtn = $('<button type="button" class="btn btn-secondary btn-danger btn-sm mr-1" onClick="defineSkillsTable.remove(' + i + ')">Elimina</button>');
+					row.append($('<td>').text(this.defineSkillsTable[i]));
+					row.append($('<td>').append(deleteBtn));
+					table.append(row);
+				}
+				row = $('<tr>');
+				let inputNew = $('<input id="newElementInput" type="text" placeholder="Nuova competenza" class="input-group mb-1" data-toggle="tooltip" data-placement="bottom">');
+				inputNew.tooltip({title: "Err", trigger: "manual"});
+				row.append($('<td>').append(inputNew));
+				row.append($('<td>').append(addBtn));
+				table.append(row);
+				this.jqeryHtmlContainerBox.html(table);
+				table.click(function(event){
+					event.stopPropagation();
+				});
+				$(window).click(function(event){
+					$("#newElementInput").tooltip('hide');
+				});
+				
+			}
+		}
+		
+		
+		//define table
+		$(document).ready(function(){
+			defineSkillsTable = new DefineSkillsTable($("#skillsTableCont"), Skills);
+			defineSkillsTable.renderSkillsTable()
+
+			$("#skillsManagement").submit(function(e){
+				Skills = defineSkillsTable.defineSkillsTable;
+				sendNewList(Skills);
+				e.preventDefault();
+				return false;
+			});
+		});
+		
+		
+		
+		
+	</script>
+</head>
+<body>
+	<!-- Title -->
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<h1>EmergercyApp</h1>
+		<!--<p></p> -->
+	</div>
+
+	<!-- navbar-->
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="#">Gestione competenze</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+			<a class="nav-link" href="#">Gestione coordinatori</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" href="#">Gestione comitati</a>
+			</li>
+		</ul>
+		</div>  
+	</nav>
+	<br>
+
+	<form id="skillsManagement" class="container" style="margin-top:30px" >
+		<br>
+		<div id="skillsTableCont"></div>
+		<br>
+		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica"><br>
+		<p id="errorDisplay" style="color:red;"></p>
+	</form>
+
+	<!--footer-->
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<h2>Footer</h2>
+	</div>
+	  
+	
+</body>
+</html>
