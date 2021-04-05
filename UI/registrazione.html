@@ -39,13 +39,16 @@
 		<!--<p></p> -->
 	</div>
 	<br>
-	<form id="autenticazione" class="container" style="margin-top:30px" >
+	<!--form con controllo inserimento doppio password e inserimento email-->
+	<form id="autenticazione" class="container"  oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords non corrispondono." : "")' style="margin-top:30px" >
 		<h2>REGISTRAZIONE</h2>
 		<br>
 
-		<input type="text" id="username" class="form-control" placeholder="insert email"><br>
-		<input type="password" id="pwd" class="form-control" placeholder="insert password"><br>
-		<input type="password" id="pwd" class="form-control" placeholder="reinsert password"><br>
+		<input type="email" id="username" class="form-control" placeholder="inserisci email" required><br>
+		<input type="password" id="pwd" class="form-control" placeholder="inserisci password" name="up" required><br>
+		<input type="password" id="pwd" class="form-control" placeholder="reinserisci password" name="up2" required><br>
+		<input type="number" id="number" class="form-control" placeholder="inserisci numero di telefono" required><br>
+
 		<div id="comitato"  class="container" style="margin-top:30px">
 			<div >
 				<br>
@@ -66,7 +69,7 @@
 				<table class="table">
 				<thead class="thead-dark">
 					<tr>
-					<th colspan="2" scope="col">Seleziona comepetenze</th>
+					<th colspan="2" scope="col">Seleziona competenze</th>
 					</tr>
 				</thead>
 				<tbody id="competenzeTable">
