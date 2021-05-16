@@ -19,12 +19,12 @@
 
 		function defineTable(){
 			//here request Ajax to server to see compatible plan
-			dimComitato=5;
+			dimComitato=3;
 			for (let i=1;i<=dimComitato;i++ ){
 				document.getElementById("comitatoTable").innerHTML+="<tr><tr><td>comitato "+i+"</td><td>  <input class=\"form-check-input\" type=\"radio\" name=\"radiocomitato\" id=\"radiocomitato"+i+"\"></td></tr></tr>";
 			}
 
-			dimCompetenze=5;
+			dimCompetenze=4;
 			for (let i=1;i<=dimCompetenze;i++ ){
 				document.getElementById("competenzeTable").innerHTML+="<tr><tr><td>competenza "+i+"</td><td>  <input class=\"form-check-input\" type=\"checkbox\" name=\"checkboxcompetenza\" id=\"checkboxcompetenza"+i+"\"></td></tr></tr>";
 
@@ -35,7 +35,7 @@
 <body onload="defineTable()">
 	<!-- Title -->
 	<div class="jumbotron text-center" style="margin-bottom:0">
-		<h1>EmergercyApp</h1>
+		<h1>AZUDU</h1>
 		<!--<p></p> -->
 	</div>
 	<br>
@@ -44,10 +44,12 @@
 		<h2>REGISTRAZIONE</h2>
 		<br>
 
-		<input type="email" id="username" class="form-control" placeholder="inserisci email" required><br>
-		<input type="password" id="pwd" class="form-control" placeholder="inserisci password" name="up" required><br>
-		<input type="password" id="pwd" class="form-control" placeholder="reinserisci password" name="up2" required><br>
-		<input type="number" id="number" class="form-control" placeholder="inserisci numero di telefono" required><br>
+		<input type="email" id="username" class="form-control" placeholder="Inserisci email" required><br>
+		<input type="password" id="pwd" class="form-control" placeholder="Inserisci password" name="up" required><br>
+		<input type="password" id="pwd" class="form-control" placeholder="Reinserisci password" name="up2" required><br>
+		<input type="password" id="name" class="form-control" placeholder="Inserisci nome" required><br>
+		<input type="text" id="surname" class="form-control" placeholder="Inserisci cognome" required><br>
+		<input type="text" id="number" class="form-control" placeholder="Inserisci numero di telefono" required><br>
 
 		<div id="comitato"  class="container" style="margin-top:30px">
 			<div >
