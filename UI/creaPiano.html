@@ -21,6 +21,26 @@
 	</style>
 	
 	<script>
+		//mettere qui la lista dei comitati che devono essere reperiti dal server
+		let inputCompetences = `["Competenza1","Cometenza2","Competenza3"]`;
+		
+		function showCompetences(jqueryElem, arrCompetences){
+			jqueryElem.html("");
+			let uniqueIdAddition = jqueryElem.index() + jqueryElem.attr("class") + jqueryElem.attr("id");
+			for(let i=0; i<arrCompetences.length; i++){
+				jqueryElem.append($('<div><input id="competence' + i + uniqueIdAddition + '" class="custom-control-input" type="checkbox"><label for="competence' + i + uniqueIdAddition + '" class="custom-control-label">' + arrCompetences[i] + '</label></div>'));
+			}
+		}
+		
+		function getCheckedCompetences(jqueryElem){
+			let competences = []
+			jqueryElem.children().each(function() {
+				if($(this).find("input").is(':checked')) competences.push($(this).find("label").text());
+			});
+			return competences;
+		}
+	
+	
 		function DefineShiftTable(jqeryHtmlContainerBox){
 			this.patt = /^Turno\s\d+/i; //default auto numbering pattern matching
 			this.defineShifts = []
@@ -231,12 +251,17 @@
 		
 		
 		$(document).ready(function(){
+			let arrCompetences = JSON.parse(inputCompetences);
+			showCompetences($("#baseCompetences"), arrCompetences);
+			showCompetences($("#advancedCompetences"), arrCompetences);
 			defineShiftTable = new DefineShiftTable($("#shiftsTableCont"));
 			defineShiftTable.renderDefineShifts()
 			
 			$("#createPlan").submit(function(e){
 				let dates = getDates();
 				if(dates != false)shifts = ShiftArrBuilder(dates[0], dates[1], defineShiftTable.defineShifts);
+				let baseCompetences = getCheckedCompetences($("#baseCompetences"))
+				let advancedCompetences = ($("#advancedCompetencesCheck").is(':checked')) ? getCheckedCompetences($("#advancedCompetences")) : null;
 				e.preventDefault();
 				return false;
 			});
@@ -306,6 +331,23 @@
 		<div id="planPeriod">
 			<h3>Turni:</h3>
 			<div id="shiftsTableCont"></div>
+		</div>
+		
+		<br>
+		<div id="competences">
+			<h3>competenze:</h3>
+			<div>
+				<h5>competenze base:</h5>
+				<div id="baseCompetences" class="custom-control custom-checkbox">
+				
+				</div>
+			</div>
+			<div>
+				<h5>competenze avanzate: <input id="advancedCompetencesCheck" class="" type="checkbox" onclick="$(this).on('click',function(){ if($(this).is(':checked')){$(this).parent().parent().find('#advancedCompetences').show()}else{$(this).parent().parent().find('#advancedCompetences').hide()}})" checked /> </h5>
+				<div id="advancedCompetences" class="custom-control custom-checkbox">
+				
+				</div>
+			</div>
 		</div>
 		<hr>
 		<p>
