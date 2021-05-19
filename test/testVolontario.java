@@ -33,7 +33,7 @@ public class TestVolontario {
         Assert.assertFalse(volontario.isCoordinatore());
     }
 
-    @Time
+    @Test
     public void TestSettersProprieta() {
         volontario.setNome("Giorgio");
         Assert.assertEquals(volontario.getNome(),"Giorgio");
