@@ -2,7 +2,7 @@ public class TestVolontario {
     private Volontario volontario;
 
     @Before
-    public void setUp() {
+    public void setup() {
         volontario = new Volontario();
     }
 
