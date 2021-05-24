@@ -22,7 +22,7 @@
 	
 	<script>
 		//mettere qui la lista dei comitati che devono essere reperiti dal server
-		let inputCompetences = `["Competenza1","Cometenza2","Competenza3"]`;
+		let inputCompetences = `["Competenza1","Competenza2","Competenza3"]`;
 		
 		function showCompetences(jqueryElem, arrCompetences){
 			jqueryElem.html("");
@@ -221,7 +221,7 @@
 				return false;
 			}
 			let endDate = getDate($("#datepicker input[type=text]").eq(1));
-			if(isNaN(endDate)){
+			if(isNaN(endDate) || endDate == null){
 				$("#errorDisplay").text("Data di fine non valida");
 				return false;
 			}
@@ -261,7 +261,12 @@
 				let dates = getDates();
 				if(dates != false)shifts = ShiftArrBuilder(dates[0], dates[1], defineShiftTable.defineShifts);
 				let baseCompetences = getCheckedCompetences($("#baseCompetences"))
+				let baseCompetencesNum = Number($("#baseCompetencesNum").val())
+				if(isNaN(baseCompetencesNum) || baseCompetencesNum < 0 || $("#baseCompetencesNum").val()==""){ $("#errorDisplay").text("Numero di volontari base non valido!"); return false;}
 				let advancedCompetences = ($("#advancedCompetencesCheck").is(':checked')) ? getCheckedCompetences($("#advancedCompetences")) : null;
+				let advancedCompetencesNum = ($("#advancedCompetencesCheck").is(':checked')) ? Number($("#advancedCompetencesNum").val()) : null;
+				if($("#advancedCompetencesCheck").is(':checked') && (isNaN(advancedCompetencesNum) || advancedCompetencesNum < 0 || $("#advancedCompetencesNum").val()=="")){ $("#errorDisplay").text("Numero di volontari avanzati non valido!"); return false;}
+				console.log(baseCompetencesNum + ", " + advancedCompetencesNum);
 				e.preventDefault();
 				return false;
 			});
@@ -338,13 +343,15 @@
 			<h3>competenze:</h3>
 			<div>
 				<h5>competenze base:</h5>
+				<input id="baseCompetencesNum" type="text" class="" placeholder="N volontari base" class="input-group mb-1">
 				<div id="baseCompetences" class="custom-control custom-checkbox">
 				
 				</div>
 			</div>
 			<div>
-				<h5>competenze avanzate: <input id="advancedCompetencesCheck" class="" type="checkbox" onclick="$(this).on('click',function(){ if($(this).is(':checked')){$(this).parent().parent().find('#advancedCompetences').show()}else{$(this).parent().parent().find('#advancedCompetences').hide()}})" checked /> </h5>
-				<div id="advancedCompetences" class="custom-control custom-checkbox">
+				<h5>competenze avanzate: <input id="advancedCompetencesCheck" class="" type="checkbox" onclick="$(this).on('click',function(){ if($(this).is(':checked')){$(this).parent().parent().find('.checkbox-hide').show()}else{$(this).parent().parent().find('.checkbox-hide').hide()}})" checked > </h5>
+				<input id="advancedCompetencesNum" class="checkbox-hide" type="text" placeholder="N volontari avanzati" class="input-group mb-1">
+				<div id="advancedCompetences" class="checkbox-hide custom-control custom-checkbox">
 				
 				</div>
 			</div>
