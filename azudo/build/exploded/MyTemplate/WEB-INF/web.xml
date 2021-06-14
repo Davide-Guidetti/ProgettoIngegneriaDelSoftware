@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC '-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN' 'http://java.sun.com/dtd/web-app_2_3.dtd'>
+
+<web-app>
+	<!-- 1) General -->
+	<!-- Name the application -->
+	<display-name>MyTemplate</display-name>
+	<description> A servlet-based project to use as a template for your owns </description>
+	
+	<!-- 2) Servlets -->
+	
+	<!-- 2.5) init parameter -->
+	<!--
+	come ricavarlo: this.getServletContext().getInitParameter("dir");
+	<context-param>
+    	<param-name>dir</param-name>
+    	<param-value>U:\\prova</param-value>
+ 	</context-param>
+	-->
+	<!--
+	<servlet>
+		<servlet-name>__serverlet1__</servlet-name>
+		<servlet-class>it.unibo.tw.web.__serverlet1__</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>__serverlet2__</servlet-name>
+		<servlet-class>it.unibo.tw.web.__serverlet2__</servlet-class>
+	</servlet> 
+	<servlet>
+		<servlet-name>__serverletConParam__</servlet-name>
+		<servlet-class>it.unibo.tw.web.servlets.JSONServlet</servlet-class>
+		<init-param>
+			<param-name>__param1__</param-name>
+			<param-value>__val1__</param-value>
+		</init-param>
+		<init-param>
+			<param-name>__param2__</param-name>
+			<param-value>__val2__</param-value>
+		</init-param>
+	</servlet>
+	-->
+	<!-- Map some URL's to the servlet -->
+	<!--
+	<servlet-mapping>
+		<servlet-name>__serverlet1__</servlet-name>
+		<url-pattern>/__serverlet1__</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>__serverlet2__</servlet-name>
+		<url-pattern>/__serverlet2__</url-pattern>
+	</servlet-mapping>
+	-->
+	
+	<!-- 3) Welcome Files -->
+	<!-- Define, in order of preference, which file to
+	show when no filename is defined in the path -->
+	<!--
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>serverletUrl</welcome-file>
+	</welcome-file-list>
+	
+	-->
+	<!-- 4) Error Handler -->
+	<!-- Define an error handler for 404 pages -->
+	<!--<error-page>
+		<error-code>404</error-code>
+		<location>/errors/notfound.html</location>
+	</error-page>-->
+	<!-- Define an handler for java.lang.Exception -->
+	<!--<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/errors/exception.html</location>
+	</error-page>-->
+	
+	
+	
+	
+	<!-- examples -->
+	
+	<!-- 
+		IMPOSTA IL TEMPO MASSIMO DI INATTIVITA PER UNA SESSIONE
+		<session-config>
+    <session-timeout>1</session-timeout>
+  </session-config>
+	
+	
+	 -->
+	
+
+	<servlet>
+		<servlet-name>EchoServlet</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.EchoServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ServletRegistrazione</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ServletRegistrazione</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ServletRegistrazioneGroup</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ServletRegistrazioneGroup</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ServletRegistrazioneConScadenza</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ServletRegistrazioneConScadenza</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ServletLoginConScadenza</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ServletLoginConScadenza</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ServletLogin</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ServletLogin</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ServletLoginGroup</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ServletLoginGroup</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ServletTemplate</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ServletTemplate</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>JSONServlet</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.JSONServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ControlloTempoSessione</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.ControlloTempoSessione</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>AdminUsersSessionsJSONServlet</servlet-name>
+		<servlet-class>it.unibo.tw.web.examples.AdminUsersSessionsJSONServlet</servlet-class>
+	</servlet>
+	
+	
+	<servlet-mapping>
+		<servlet-name>EchoServlet</servlet-name>
+		<url-pattern>/echoservlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletTemplate</servlet-name>
+		<url-pattern>/servlettemplate</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>JSONServlet</servlet-name>
+		<url-pattern>/jsonservlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletRegistrazione</servlet-name>
+		<url-pattern>/servletregistrazione</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletRegistrazioneGroup</servlet-name>
+		<url-pattern>/servletregistrazionegroup</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletRegistrazioneConScadenza</servlet-name>
+		<url-pattern>/servletregistrazioneconscadenza</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletLogin</servlet-name>
+		<url-pattern>/servletlogin</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletLoginGroup</servlet-name>
+		<url-pattern>/servletlogingroup</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletLoginConScadenza</servlet-name>
+		<url-pattern>/servletloginconscadenza</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ControlloTempoSessione</servlet-name>
+		<url-pattern>/controllotemposessione</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>AdminUsersSessionsJSONServlet</servlet-name>
+		<url-pattern>/adminuserssessionsjsonservlet</url-pattern>
+	</servlet-mapping>
+	
+	<listener>
+		<listener-class>it.unibo.tw.web.examples.MySessionCounter</listener-class>
+	</listener>
+	
+	
+	<!-- http://localhost:8080/MyTemplate/pages/examples/AjaxXML.html -->
+	<!--  http://localhost:8080/MyTemplate/pages/examples/webSocketPing.html -->
+	<!--  http://localhost:8080/MyTemplate/pages/examples/HTML-DOM-JS.html -->
+	<!--  http://localhost:8080/MyTemplate/pages/examples/HTML-CSS.html -->
+	
+	
+</web-app>

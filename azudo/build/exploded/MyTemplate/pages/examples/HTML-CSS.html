@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>page title</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Expires" content="-1"/>
+		
+		<!-- generic CSS-->
+		<link rel="stylesheet" href="../../styles/default.css" type="text/css"/>
+		<style>
+			body {
+				font-family: Verdana, Helvetica, sans-serif;
+				font-size: 9pt;
+				background: #FFF; /*white*/
+				color: #000; /*black*/
+				
+				/*se si vuole aggiungere una imagine di sfondo*/
+				background-image: url("../../images/wood.jpg");
+				background-repeat: repeat;
+				background-attachment:fixed; /*opposite: scroll*/
+			}
+		</style>
+		<script type="text/javascript">
+		
+		</script>
+	</head>
+	
+	<body>
+		<header id="topnav">
+			<a href="#home" class="navActive">Home</a>
+			<a href="#news" class="navElement">Pagina1</a>
+			<a href="#contact" class="navElement">Pagina2</a>
+			<a href="#about" class="navElement">Pagina3</a>
+			<!-- searchBar-->
+			<div class="wrap">
+				<div class="search">
+				<input type="text" class="searchTerm" placeholder="Cosa stai cercando?">
+					<button type="submit" class="searchButton">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+			</div>
+		</header>
+		
+		
+		<div class="mainContent">
+			
+				<h1>Heading 1</h1>
+				<h2>Heading 2</h2>
+				<h3>Heading 3</h3>
+				<h4>Heading 4</h4>
+				<h5>Heading 5</h5>
+				<h6>Heading 6</h6>
+			
+			<hr>
+			
+				<p><b>This is a paragraph</b></p>
+				<p>And this is <br> 
+				another paragraph</p>
+			
+			<hr>
+			
+				<h4>The dl, dd, and dt elements</h4>
+				<p>These three elements are used to create a description list:</p>
+					<dl>
+						<dt>Coffee</dt>
+						<dd>Black hot drink</dd>
+						<dt>Milk</dt>
+						<dd>White cold drink</dd>
+					</dl>
+				
+			<hr>
+				
+				<div class="elementsInRowContainer">
+					<p> How to put elements on a row: </p>
+					<div class="elementsInRow"> 1 </div>
+					<div class="elementsInRow"> 2 </div>
+					<div class="elementsInRow"> 3 </div>
+					<div class="elementsInRow"> 4 </div>
+					
+					<div class="clear"></div><!-- needed to not make the parent element shorter than his content -->
+				</div>
+				
+			<hr>
+				
+				<h4> Lists! </h4>
+				<ul class="elementsInRow noTopMargin">
+					<li><p> element 1 </p>
+					<li><p> element 2 </p>
+					<li><p> element 3 </p>
+				</ul>
+				<ol class="elementsInRow noTopMargin">
+					<li><p> element 1 </p>
+					<li><p> element 2 </p>
+					<li><p> element 3 </p>
+				</ol>
+				<div class="clear"></div>
+				
+			<hr>
+				
+				<table>
+					<tr>
+						<th></th>
+						<th scope="col">A</th>
+						<th scope="col">B</th>
+						<th scope="col">C</th>
+					</tr>
+					<tr>
+						<th scope="row">1</th>
+						<td>cella A1</td>
+						<td>cella B1</td>
+						<td>cella C1</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>cella A2</td>
+						<td>cella B2</td>
+						<td>cella C2</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>cella A3</td>
+						<td>cella B3</td>
+						<td>cella C3</td>
+					</tr>
+				</table>
+				
+			<hr>
+				
+				<h4> A frame: </h4>
+				<iframe src="HTML-DOM-JS.html" style="width:100%">Il tuo browser non supporta gli iframe</iframe>
+				
+			<hr>
+			
+				<h4>Columns:</h4>
+				<div class="row">
+					<div class="column cenerText" style="width: 30%;">
+						<h2 style="border: solid 1px;">Column 1</h2>
+						<p>Some text..</p>
+					</div>
+					<div class="column cenerText" style="width: 40%;">
+						<h2 style="border: solid 1px;">Column 2</h2>
+						<p>Some text..</p>
+					</div>
+					<div class="column cenerText" style="width: 30%;">
+						<h2 style="border: solid 1px;">Column 3</h2>
+						<p>Some text..</p>
+					</div>
+				</div>
+			
+			<hr>
+			
+		</div>
+        
+		
+		
+        <footer>
+            <table class="fullWidth noBorder" cellpadding="2%">	
+                <td valign="top">
+                    Creato da: Davide Guidetti
+                </td>
+                <td valign="top">
+                    Contact us: <a href="mailto:pippo.puto@gmail.com">pippo.puto@gmail.com</a>
+                </td>
+                <td>
+                    <small>29/11/2020</small>
+                </td>
+            </table>
+            
+        </footer>
+    </body>
+</html>
