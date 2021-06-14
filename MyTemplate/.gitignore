@@ -1,0 +1,15 @@
+#ant's evinronment properties
+environment.properties
+
+#eclispe configuration
+.classpath
+.project
+
+#other not necessary files & dirs
+.settings
+build
+tmp
+WebContent
+bin
+
+!.gitignore

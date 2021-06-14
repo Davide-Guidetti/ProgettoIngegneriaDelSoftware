@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<title>EmergercyApp</title>
+	<meta charset="utf-8">
+
+	<!-- script for usage of bootstrap, with jquery-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<style>
+		#shiftsTableContainer td {
+			text-align: center; 
+			vertical-align: middle;
+			display: table-cell;
+		}
+		
+		#shiftsTableContainer td input[type=checkbox]{
+			position: absolute;
+			margin-top: -0.4rem;
+			margin-left: -0.4rem;
+		}
+	</style>
+
+	<script>
+		//DATI IN INPUT DA SERVER
+		var canSubrcribeWithBasicCompetences = true;
+		var canSubrcribeWithSpecialCompetences = true;
+		var requestedBasicCompetences = 30; //può anche essere messo ad undefined se non si vuole mostrare la relativa colonna con il conteggio
+		var requestedSpecialCompetences = 25;//può anche essere messo ad undefined se non si vuole mostrare la relativa colonna con il conteggio
+		//poi serviranno anche gli array di competenze...
+		//ATTENZIONE! DEVONO ESSERE IN ORDINE CRONOLOGICO!!!!!
+		var inputShifts = `[
+		  {
+			"name": "Turno mattina",
+			"startDateTime": "2021-04-05T08:45:00.000Z",
+			"endDateTime": "2021-04-05T10:00:00.000Z",
+			"partecipation": true,
+			"subscribedSpecialCompetences": 10,
+			"subscribedBasicCompetences": 12
+		  },
+		  {
+			"name": "Turno pomeriggio",
+			"startDateTime": "2021-04-05T13:30:00.000Z",
+			"endDateTime": "2021-04-05T16:15:00.000Z",
+			"partecipation": false,
+			"subscribedSpecialCompetences": 11,
+			"subscribedBasicCompetences": 13
+		  },
+		  {
+			"name": "Turno mattina",
+			"startDateTime": "2021-04-06T08:45:00.000Z",
+			"endDateTime": "2021-04-06T10:00:00.000Z",
+			"partecipation": false,
+			"subscribedSpecialCompetences": 12,
+			"subscribedBasicCompetences": 30
+		  },
+		  {
+			"name": "Turno pomeriggio",
+			"startDateTime": "2021-04-06T13:30:00.000Z",
+			"endDateTime": "2021-04-06T16:15:00.000Z",
+			"partecipation": true,
+			"subscribedSpecialCompetences": 13,
+			"subscribedBasicCompetences": 30
+		  },
+		  {
+			"name": "Turno mattina",
+			"startDateTime": "2021-04-07T08:45:00.000Z",
+			"endDateTime": "2021-04-07T10:00:00.000Z",
+			"partecipation": false,
+			"subscribedSpecialCompetences": 14,
+			"subscribedBasicCompetences": 15
+		  },
+		  {
+			"name": "Turno pomeriggio",
+			"startDateTime": "2021-04-07T13:30:00.000Z",
+			"endDateTime": "2021-04-07T16:15:00.000Z",
+			"partecipation": false,
+			"subscribedSpecialCompetences": 15,
+			"subscribedBasicCompetences": 16
+		  },
+		  {
+			"name": "Turno mattina",
+			"startDateTime": "2021-04-08T08:45:00.000Z",
+			"endDateTime": "2021-04-08T10:00:00.000Z",
+			"partecipation": true,
+			"subscribedSpecialCompetences": 16,
+			"subscribedBasicCompetences": 17
+		  },
+		  {
+			"name": "Turno pomeriggio",
+			"startDateTime": "2021-04-08T13:30:00.000Z",
+			"endDateTime": "2021-04-08T16:15:00.000Z",
+			"partecipation": true,
+			"subscribedSpecialCompetences": 17,
+			"subscribedBasicCompetences": 18
+		  },
+		  {
+			"name": "Turno mattina",
+			"startDateTime": "2021-04-09T08:45:00.000Z",
+			"endDateTime": "2021-04-09T10:00:00.000Z",
+			"partecipation": true,
+			"subscribedSpecialCompetences": 18,
+			"subscribedBasicCompetences": 19
+		  },
+		  {
+			"name": "Turno pomeriggio",
+			"startDateTime": "2021-04-09T13:30:00.000Z",
+			"endDateTime": "2021-04-09T16:15:00.000Z",
+			"partecipation": true,
+			"subscribedSpecialCompetences": 19,
+			"subscribedBasicCompetences": 20
+		  }
+		]`;
+		
+		
+		var selectorBasicOrSpecial;
+		var shiftsShowManager;
+		
+		if(canSubrcribeWithBasicCompetences == true && canSubrcribeWithSpecialCompetences == false) selectorBasicOrSpecial = 'b';
+		else if(canSubrcribeWithBasicCompetences == false && canSubrcribeWithSpecialCompetences == true) selectorBasicOrSpecial = 's';
+		else { //both are possible: show a choice menu
+			selectorBasicOrSpecial = 'b'; //default choice
+			$(document).ready(function(){
+				$("#choice_menu").removeClass("d-none"); //show the choiche menu
+				$("#choice_menu").change(function(){
+					selectorBasicOrSpecial = $('input[name="basicOrAdvancedChoice"]:checked').val();
+					shiftsShowManager.updateSubscribeBasicOrSpecial(selectorBasicOrSpecial);
+				});
+			});
+		}
+		
+		function ShiftsShowManager(canSubrcribeWithBasicCompetences, canSubrcribeWithSpecialCompetences, requestedBasicCompetences, requestedSpecialCompetences, selectorBasicOrSpecial){
+			this.canSubrcribeWithBasicCompetences = canSubrcribeWithBasicCompetences;
+			this.canSubrcribeWithSpecialCompetences = canSubrcribeWithSpecialCompetences;
+			this.requestedBasicCompetences = requestedBasicCompetences;
+			this.requestedSpecialCompetences = requestedSpecialCompetences;
+			this.shiftsData = []; //arr of ShiftData
+			this.jqeryHtmlContainerBox = $('#shiftsTableContainer');
+			
+			this.loadData = function(shiftsData){
+				for(i=0; i<shiftsData.length; i++){ //conversion from array of serverside ojects to array of clientside objects
+					this.shiftsData[i] = new ShiftData(shiftsData[i].name, shiftsData[i].startDateTime, shiftsData[i].endDateTime, shiftsData[i].partecipation, 
+														shiftsData[i].subscribedBasicCompetences, shiftsData[i].subscribedSpecialCompetences, requestedBasicCompetences, requestedSpecialCompetences,
+														selectorBasicOrSpecial);
+				}
+				this.renderTable();
+			}
+			this.getData = function(){
+				let resArr = []; 
+				for(i=0; i<this.shiftsData.length; i++){ //conversion from array of clientside objects to array of serverside ojects
+					let o = new Object();
+					o.name = this.shiftsData[i].name;
+					o.startDateTime = this.shiftsData[i].startDateTime;
+					o.endDateTime = this.shiftsData[i].endDateTime;
+					o.partecipation = this.shiftsData[i].partecipation;
+					resArr.push(o);
+				}
+				return resArr;
+			}
+			this.updateSubscribeBasicOrSpecial = function(BasicOrSpecial){ //'b' for basic, 's' for special
+				for(i=0; i<this.shiftsData.length; i++) this.shiftsData[i].updateSubscribeBasicOrSpecial(BasicOrSpecial);
+				this.renderTable();
+			}
+			this.shiftPartecipationChange = function(index, isPartecipating){
+				this.shiftsData[index].partecipation = isPartecipating;
+				this.renderTable();
+			}
+			this.renderTable = function(){
+				let table = $('<table class="table">');
+				let row;
+				
+				let tableHead = $('<thead class="thead-dark">')
+				row = $('<tr>').append('<th>Data turno</th>').append('<th>Fascia orario turno</th>').append('<th>Iscrizione</th>');
+				if(requestedBasicCompetences != undefined){row.append('<th>Iscritti competenze base</th>')}
+				if(requestedSpecialCompetences != undefined){row.append('<th>Iscritti competenze speciali</th>')}
+				tableHead.append(row)
+				
+				let tableBody = $('<tbody>');
+				let i;
+				let previousShift, firstIndexWithThisDate;
+				for(i=0; i<this.shiftsData.length; i++){
+					row = $('<tr>').attr("elementRowIndex", i);
+					if(previousShift == undefined || this.shiftsData[i].isOnSameDate(previousShift) == false){ //add cell with new date
+						if(previousShift != undefined) tableBody.find('tr[elementRowIndex=' + firstIndexWithThisDate + ']').children().eq(0).attr('rowspan', i-firstIndexWithThisDate); //vertically expand the cell with the date of the previous group of shifts
+						firstIndexWithThisDate = i;
+						//create the cell with the date of the new group
+						let globalDateCheckbox = $('<div class="custom-control custom-checkbox">').append($('<input id="globalDateCheck' + i + '" type="checkbox" class="custom-control-input globalDateCheck"><label class="custom-control-label" for="globalDateCheck' + i + '"></label>'));
+						row.append($('<td>').append('<p>' + this.shiftsData[i].getDayString() + '</p>').append(globalDateCheckbox));
+						let checkBoxInDom = row.find('#globalDateCheck' + i);
+						switch(this.getParticipationSummary(this.shiftsData[i].startDateTime)){
+							case -1:
+								checkBoxInDom.prop('checked', false); break;
+							case 0:
+								checkBoxInDom.prop('indeterminate', true); break;
+							case +1:
+								checkBoxInDom.prop('checked', true); break;
+							default:
+								checkBoxInDom.prop('disabled', true); break;
+						}
+						checkBoxInDom.click(function(){
+							let i = Number($(this).parent().parent().parent().attr("elementRowIndex"));
+							if($(this).is(":checked")){
+								shiftsShowManager.setParticipateToAllSelectable(shiftsShowManager.shiftsData[i].startDateTime);
+							}else{
+								shiftsShowManager.cancelParticipateToAll(shiftsShowManager.shiftsData[i].startDateTime);
+							}
+						});
+					}
+					previousShift = this.shiftsData[i];
+					row.append($('<td>').html(this.shiftsData[i].name + ': ' + this.shiftsData[i].getStartTimeString() + '&nbsp-&nbsp' + this.shiftsData[i].getEndTimeString())); //inserimento nome e fascia oraria turno
+					row.append($('<td class="form-check">').html('<input class="form-check-input" type="checkbox" value="" onchange="shiftsShowManager.shiftPartecipationChange(' + i + ',$(this).is(\':checked\'))" ' + ((this.shiftsData[i].partecipation)?'checked':'') + ' ' + ((this.shiftsData[i].isCheckBoxEnabled())?'':'disabled') + '>')); //isnerimento checkbox di iscrizione
+					if(requestedBasicCompetences != undefined){row.append('<td>' + this.shiftsData[i].getBasicCompetencesCount() + '</td>')} //numero iscritti competenze base
+					if(requestedSpecialCompetences != undefined){row.append('<td>' + this.shiftsData[i].getSpecialCompetencesCount() + '</td>')} //numero iscritti competenze avanzate
+					tableBody.append(row);
+				}
+				if(previousShift != undefined) tableBody.find('tr[elementRowIndex=' + firstIndexWithThisDate + ']').children().eq(0).attr('rowspan', i-firstIndexWithThisDate);
+				
+				table.append(tableHead);
+				table.append(tableBody);
+				this.jqeryHtmlContainerBox.html(table);
+			}
+			this.getParticipationSummary = function(dayDate){ //-1 no shift selected for this day, 1 all of the selectable shifts are selected, 0 some of them are some are not. -2 no shift is selectable
+				let allSelectableSelected = true;
+				let allSelectableUnselected = true;
+				for(i=0; i<this.shiftsData.length; i++){
+					if(dayDate.getFullYear() == this.shiftsData[i].startDateTime.getFullYear() && dayDate.getMonth() == this.shiftsData[i].startDateTime.getMonth() && dayDate.getDate() == this.shiftsData[i].startDateTime.getDate()){
+						if(this.shiftsData[i].canPartecipateToShift()){
+							if(this.shiftsData[i].partecipation == true){
+								allSelectableUnselected = false;
+							}else{
+								allSelectableSelected = false;
+							}
+						}
+					}
+				}
+				let res;
+				if(allSelectableSelected && !allSelectableUnselected) res=1;
+				else if(!allSelectableSelected && allSelectableUnselected) res=-1;
+				else if(!allSelectableSelected && !allSelectableUnselected) res=0;
+				else res=2; //both true: no shift can be selected
+				return res;
+			}
+			this.setParticipateToAllSelectable = function(dayDate){
+				for(i=0; i<this.shiftsData.length; i++){
+					if(dayDate.getFullYear() == this.shiftsData[i].startDateTime.getFullYear() && dayDate.getMonth() == this.shiftsData[i].startDateTime.getMonth() && dayDate.getDate() == this.shiftsData[i].startDateTime.getDate()){
+						if(this.shiftsData[i].canPartecipateToShift()){
+							this.shiftsData[i].partecipation = true;
+						}
+					}
+				}
+				this.renderTable();
+			}
+			this.cancelParticipateToAll = function(dayDate){
+				for(i=0; i<this.shiftsData.length; i++){
+					if(dayDate.getFullYear() == this.shiftsData[i].startDateTime.getFullYear() && dayDate.getMonth() == this.shiftsData[i].startDateTime.getMonth() && dayDate.getDate() == this.shiftsData[i].startDateTime.getDate()){
+						this.shiftsData[i].partecipation = false;
+					}
+				}
+				this.renderTable();
+			}
+		}	
+		
+		function ShiftData(name, startDateTime, endDateTime, partecipation, subscribedBasicCompetences, subscribedSpecialCompetences, requestedBasicCompetences, requestedSpecialCompetences, subscribeBasicOrSpecial){
+			this.name = name;
+			this.startDateTime = new Date(startDateTime); //date
+			this.endDateTime = new Date(endDateTime); //date
+			this.partecipation = partecipation;
+			this.originalPartecipationVal = partecipation; //this does not get updated. Needed for isCheckBoxEnabled
+			this.subscribedBasicCompetences = subscribedBasicCompetences;
+			this.subscribedSpecialCompetences = subscribedSpecialCompetences;
+			this.requestedBasicCompetences = requestedBasicCompetences;
+			this.requestedSpecialCompetences = requestedSpecialCompetences;
+			this.subscribeBasicOrSpecial = subscribeBasicOrSpecial;
+			
+			this.isOnSameDate = function(shiftData){
+				return shiftData.startDateTime.getFullYear() == this.startDateTime.getFullYear() && shiftData.startDateTime.getMonth() == this.startDateTime.getMonth() && shiftData.startDateTime.getDate() == this.startDateTime.getDate();
+			}
+			this.getDayString = function(){return this.startDateTime.getDate() + '/' + (this.startDateTime.getMonth()+1) + '/' + this.startDateTime.getFullYear();}
+			this.getStartTimeString = function(){return this.startDateTime.getHours() + ':' + ((this.startDateTime.getMinutes()<10)?'0':'') + this.startDateTime.getMinutes();}
+			this.getEndTimeString = function(){return this.endDateTime.getHours() + ':' + ((this.endDateTime.getMinutes()<10)?'0':'') + this.endDateTime.getMinutes();}
+			this.getBasicCompetencesCount = function(){return this.subscribedBasicCompetences + '/' + requestedBasicCompetences;}
+			this.getSpecialCompetencesCount = function(){return this.subscribedSpecialCompetences + '/' + requestedSpecialCompetences;}
+			this.updateSubscribeBasicOrSpecial = function(subscribeBasicOrSpecial){
+				this.subscribeBasicOrSpecial = subscribeBasicOrSpecial;
+				if(this.canPartecipateToShift() == false) this.partecipation = false; //in this way we automatically uncheck the box
+			}
+			this.isCheckBoxEnabled = function(){
+				return this.canPartecipateToShift();
+			}
+			this.canPartecipateToShift = function(){
+				if(this.originalPartecipationVal) return true;
+				if(this.subscribeBasicOrSpecial == 'b'){
+					return (this.subscribedBasicCompetences < this.requestedBasicCompetences) ? true : false;
+				}else if(this.subscribeBasicOrSpecial == 's'){
+					return (this.subscribedSpecialCompetences < this.requestedSpecialCompetences) ? true : false;
+				}
+				return undefined;
+			}
+		}
+		
+		$(document).ready(function(){
+			shiftsShowManager = new ShiftsShowManager(canSubrcribeWithBasicCompetences, canSubrcribeWithSpecialCompetences, requestedBasicCompetences, requestedSpecialCompetences, selectorBasicOrSpecial);
+			shiftsShowManager.loadData(JSON.parse(inputShifts));
+		
+			$("#sendButton").click(function(event){
+				let outObj = new Object();
+				outObj.shfitArr = shiftsShowManager.getData();
+				outObj.basicOrSpecial = selectorBasicOrSpecial;
+				//conversione in json e invio al server
+				console.log(outObj);
+				event.preventDefault();
+				return false;
+			});
+		});
+		
+	</script>
+</head>
+<body>
+	<!-- Title -->
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<h1>EmergercyApp</h1>
+		<!--<p></p> -->
+	</div>
+
+	<!-- navbar-->
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="#">Piani compatibili</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/creaPiano.html">Creazione piano</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" href="#">Dati</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/PannelloGestionePiani.html">Piani accettati</a>
+			</li>
+		</ul>
+		</div>  
+	</nav>
+	<br>
+	<div class="container" style="margin-top:30px">
+		<h2>PIANO 1</h2>
+		<h3>Informazioni </h3>
+		<h5>Luogo</h5>
+		LUOGO 1 <br>
+		<h5>Descrizione</h5> 
+		DESCRIZIONE <br>
+		<h3>Competenze Base </h3>
+		COMPETENZA 1 <br>
+		COMPETENZA 2 <br>
+		COMPETENZA 3 <br>
+		COMPETENZA 4 <br>
+		<h3>Competenze Speciali </h3>
+		COMPETENZA 5 <br>
+		COMPETENZA 6 <br>
+
+		<br>
+		<div id="choice_menu" class="d-none">
+			<b>Seleziona se vuoi aderire al piano con le competenze base o quelle speciali:</b>
+			<div class="custom-control custom-radio">
+				<input class="form-check-input" type="radio" id="exampleRadios1" name="basicOrAdvancedChoice" value="b" checked>
+				<label class="form-check-label" for="exampleRadios1">Competenze base</label>
+			</div>
+			<div class="custom-control custom-radio">
+				<input class="form-check-input" type="radio" id="exampleRadios2" name="basicOrAdvancedChoice" value="s">
+				<label class="form-check-label" for="exampleRadios2">Competenze speciali</label>
+			</div>
+		</div>
+		
+		<br>
+		
+		<div>
+		  <h3>TURNI DISPONIBILI:</h3>
+		  <div id="shiftsTableContainer">
+		  </div>
+		</div>
+		<button id="sendButton" type="submit" class="btn btn-primary btn-lg">Invia</button>
+		<br>
+	  </div>
+
+
+	<!--footer-->
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<h2>Footer</h2>
+	</div>
+	  
+	
+</body>
+</html>

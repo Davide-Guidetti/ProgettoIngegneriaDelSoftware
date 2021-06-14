@@ -1,9 +1,0 @@
-# Environment properties for 
-# building and running the application
-
-# JRE
-jdk.home=U:/TecnlWeb/jdk-15
-
-# WebServer
-server.home=U:/TecnlWeb/apache-tomcat-9.0.8
-deploy.path=${server.home}/webapps

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Insert title here</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Expires" content="-1"/>
+		<link rel="stylesheet" href="http://localhost:8080/MyTemplate/styles/default.css" type="text/css"/>
+		<script type="text/javascript" src="http://localhost:8080/MyTemplate/scripts/jquery-v3.5.1.min.js"></script>
+		<script type="text/javascript" src="http://localhost:8080/MyTemplate/scripts/formUtils.js"></script>
+		<script type="text/javascript" src="http://localhost:8080/MyTemplate/scripts/ajaxScriptJson.js"></script>
+		<script>
+		
+		var maxx, maxy;
+		function showMatrixIn(){
+			maxx = $("#X").val();
+			maxy = $("#Y").val();
+			maxx = parseInt(maxx);
+			maxy = parseInt(maxy);
+			if(isNaN(maxx) || isNaN(maxy) )return false;
+			let strin = "";
+			for(let y = 0; y<maxy; y++){
+				for(let x = 0; x<maxx; x++){
+					strin += '<input id="' + ('mat' + x + '_' + y) + '" type="text"/>';
+				}
+				strin += '<br>'
+			}
+			$("#input").html(strin);
+		}
+		
+		function getAndSend(){
+			var o = new Array();
+			for(let x = 0; x<maxx; x++){
+				o[x] = new Array();
+			}
+			for(let y = 0; y<maxy; y++){
+				for(let x = 0; x<maxx; x++){
+					o[x][y] = parseInt($("#" + ('mat' + x + '_' + y)).val());
+				}
+			}
+			send(o)
+		}
+		
+		function send(val){
+			funzionePostJSON(
+				/*url*/ 'http://localhost:8080/MyTemplate/JSONServlet', 
+				/*parametri*/ 'JSON=', /*passiamo un valore client->server direttamente come stringa in un parametro, senza usare json*/
+				/*elemento DOM*/ $("#out")[0], 
+				/*funzione parsing*/ parseJSON, /*siccome la serverlet ci risponde con un oggetto (decodifica da json a oggetto fatto dalla lib), abbiamo bisogno di una funzione che lo traduca in html*/
+				/*oggetto da inviare e convertire in JSON*/ val
+			);
+		}
+
+		/*
+		* Tale funzione si dovrebbe occupare di convertire l'oggetto risultate dal JSON in un elemento HTML. 
+		* Dunque la funzione dovrebbe restituire una stringa contenente il codice HTML da inserire nell'elemento 
+		* (in tal caso non serve fare alcuna operazione aggiuntiva su element)
+		* Se invece si vuole gestire internamente la decodifica usando l'elemento element, allora si può restituire un null, in modo che la libreira non vada a sovrascrivere il contenuto dell'elemento
+		* in ogni caso se la riposta non arriva, o non è in formato JSON, allora la funzione non viene invocata e 
+		* la libreria gestisce come può il risultato inserendo qualcosa di poco carino ma forse acora comprensibile direttamente dentro l'elemento
+		*/
+		function parseJSON(Obj, element){
+			// predisposizione variabile stringa da restituire
+			risultato = "<table>";
+			
+			// ciclo di decodifica degli elementi e scrittura codice HTML
+			for ( var y=0;  y < Obj[0].length;  y++ ) {
+				risultato += '<tr>'
+				for ( var x=0;  x<Obj.length;  x++ ) {
+					risultato += '<td>' + Obj[x][y] +'</td>';
+				}
+				risultato += '<tr/>';
+			}
+			risultato += "</table>";
+			
+			// restituzione dell'html da aggiungere alla pagina
+			return risultato;
+			//return null;
+		}
+		
+		/*semplice richiesta ajax
+		$.ajax({
+			url: "http://localhost:8080/MyTemplate/__ServletTemplate__" + "?__param1__=" + __$("#in").val()__ + "&__param2__=" + __$("#in").val()__, 
+			success: function(result){
+				//occhio che da qui non si ha accesso a variabili globali
+			}
+		});
+		*/
+		
+		</script>
+	</head>
+	<body>
+	
+	<label>X:</label><input id="X" type="text"/></label><br>
+	<label>Y:</label><input id="Y" type="text"/></label><br>
+	<input type="submit" onclick="showMatrixIn()" value="ottieni celle di inserimento"/><br>
+	
+	<br><br>
+	
+	<div id="input"></div><br>
+	<button onclick="getAndSend()">send</button><br>
+	
+	<br><br>
+	
+	<div id="out"></div>
+	
+<!-- 	<form> -->
+<!-- 		<input id="in" type="text"/> -->
+<!-- 		<input type="submit" onsubmit="check()"/> -->
+<!-- 	</form> -->
+	
+	</body>
+</html>

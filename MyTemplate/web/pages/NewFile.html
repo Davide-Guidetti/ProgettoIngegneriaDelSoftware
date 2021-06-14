@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Insert title here</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Pragma" content="no-cache"/>
+		<meta http-equiv="Expires" content="-1"/>
+
+		<script type="text/javascript" src="http://localhost:8080/MyTemplate/scripts/jquery-v3.5.1.min.js"></script>
+		<script type="text/javascript" src="http://localhost:8080/MyTemplate/scripts/ajaxScriptJson.js"></script>
+		<script>
+
+
+
+		function inviaAjax()
+		{
+
+			var dato = "questo e un dato";
+
+			// semplice richiesta ajax
+						$.ajax({
+							url: "http://localhost:8080/MyTemplate/masterservlet",
+							success: function(result){
+								console.log("ho ricevuto "+result);
+								//occhio che da qui non si ha accesso a variabili globali
+							}
+						});
+
+/*
+				//semplice richiesta ajax MA in post	json
+						$.ajax({
+									url: 'http://localhost:8080/MyTemplate/',
+									type: 'post',
+									data: {
+										dato: JSON.stringify(dato)
+									},
+									success: function (result) {
+											console.log("ho ricevuto "+result);
+									}
+							});
+*/
+		}
+
+
+		</script>
+
+	</head>
+	<body onload="inviaAjax()">
+
+	</body>
+</html>
