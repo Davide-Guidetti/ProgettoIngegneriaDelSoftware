@@ -1,6 +1,9 @@
 #ant's evinronment properties
 environment.properties
 
+#.war
+MyTemplate.war
+
 #eclispe configuration
 .classpath
 .project
