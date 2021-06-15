@@ -30,22 +30,21 @@
 	//il seguente codice di jquery è in grado di tenere traccia di tutte le checkbox selezionate nella pagina con il valore associato
 	var checkedCompetenze = [];
 
-	$('#category-list :checkbox').change(function()
-	{
+	function getCompetenze(){
 		checkedCompetenze = [];
-	    $('#category-list :checkbox').each(function(i, item){
-	        if($(item).is(':checked'))
-	        {
-	        	checkedCompetenze.push($(item).val());
-	        }
-	    });
-	   console.log("checkedCompetenze:", checkedCompetenze);
-	})
+		$('#competenze form input').each(function(i, item){
+	 		if($(this).is(':checked')){
+	    		checkedCompetenze.push($(this).attr("name"));
+	    	}
+		});
+		console.log("checkedCompetenze:", checkedCompetenze);
+	}
 
 	function inviaAjaxVolontari(){
+		getCompetenze()
 
 		$.ajax({
-			url: 'http://localhost:8070/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
 			type: 'post',
 			data: {
 				listCompetenze: JSON.stringify(checkedCompetenze),
@@ -53,7 +52,7 @@
 			},
 			success: function (Obj) {
 					console.log("ho ricevuto "+Obj);
-					Obj = JSON.parse(Obj)
+					Obj = (Obj != "") ? JSON.parse(Obj) : [];
 					testo="<h3>VOLONTARI COMPATIBILI:</h3>";
 					testo+="<table class=\"table\">";
 					testo+="<thead class=\"thead-dark\">";
@@ -68,34 +67,32 @@
 
 	}
 
-
-
 	function inviaAjaxCompetenze(){
 		console.log("invio")
-			$.ajax({
-				url: "http://localhost:8070/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
-				type: 'post',
-				success: function(Obj){
+		$.ajax({
+			url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+			type: 'post',
+			success: function(Obj){
 
 
-					Obj = JSON.parse(Obj)
+				Obj = JSON.parse(Obj)
 
-					//nome oggetto competenza contenente il parametro nome
-					testo="<h3>Competenze </h3><form>";
+				//nome oggetto competenza contenente il parametro nome
+				testo="<h3>Competenze </h3><form>";
 
-					for ( var a=0, b=Obj.length;  a<b;  a++ ) {
-						testo += "<div class=\"custom-control custom-checkbox mb-3\">";
-						testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+Obj[a].nome+"\" name=\""+Obj[a].nome+"\">";
-						testo += "<label class=\"custom-control-label\" for=\"customCheck"+Obj[a].nome+"\">"+Obj[a].nome+"</label>";
-						testo += "</div>";
-					}
-
-					testo+="</form>";
-
-					document.getElementById("competenze").innerHTML=testo;
+				for ( var a=0, b=Obj.length;  a<b;  a++ ) {
+					testo += "<div class=\"custom-control custom-checkbox mb-3\">";
+					testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+a+"\" name=\""+Obj[a].nomeCompetenza+"\">";
+					testo += "<label class=\"custom-control-label\" for=\"customCheck"+a+"\">"+Obj[a].nomeCompetenza+"</label>";
+					testo += "</div>";
 				}
-			});
-		}
+
+				testo+="</form>";
+
+				document.getElementById("competenze").innerHTML=testo;
+			}
+		});
+	}
 	</script>
 
 </head>

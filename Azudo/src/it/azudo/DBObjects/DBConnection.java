@@ -48,8 +48,12 @@ public class DBConnection {
 	}
 	
 	//retrun the system registered competences
-	public List<Competenza> getCompetenze() {
-		return competenze;
+	public List<it.azudo.model.volontario.Competenza> getCompetenze() {
+		List<it.azudo.model.volontario.Competenza> res = new ArrayList<>();
+		for (Competenza c : competenze) { 
+			res.add(new it.azudo.model.volontario.Competenza(c.getNome())); 
+		}
+		return res;
 	}
 	
 	//restituisce i volotari approvati (con anche le competenze possedute)

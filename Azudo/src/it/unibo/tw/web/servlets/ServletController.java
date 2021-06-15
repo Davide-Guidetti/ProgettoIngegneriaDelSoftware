@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import it.azudo.DBObjects.Competenza;
+import it.azudo.model.volontario.Competenza;
 import it.azudo.DBObjects.DBConnection;
 import it.azudo.model.volontario.VolontarioApprovato;
 
@@ -36,7 +36,8 @@ public class ServletController extends HttpServlet {
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		PrintWriter out = response.getWriter();		competenze = DB.getCompetenze();//Aggiorno le competenze, in caso siano cambiate dall'ultima volta		
+		PrintWriter out = response.getWriter();	
+		competenze = DB.getCompetenze();//Aggiorno le competenze, in caso siano cambiate dall'ultima volta		
 			
 		
 
@@ -52,24 +53,21 @@ public class ServletController extends HttpServlet {
 		{		
 			String JSONStr = request.getParameter("listCompetenze");
 			System.out.println(JSONStr);
-			Competenza comp [] = g.fromJson(JSONStr, Competenza[].class);
+			String competStr[] = g.fromJson(JSONStr, String[].class);
+			List<Competenza> comp = new ArrayList<Competenza>();
+			for (int i=0; i<competStr.length; i++) comp.add(new Competenza(competStr[i]));
 			
-			for(Competenza c : comp)System.out.println(c.getNome());
+			for(Competenza c : comp)System.out.println(c.nomeCompetenza());
 			
 			List<VolontarioApprovato> volAp = DB.getVolontariComitato(Comitato);
 			List<VolontarioApprovato> volontariCompatibili = new ArrayList <>();		
 			
 			for(int i =0; i< volAp.size();i++) //ciclo tutti i volontari del comitato
-			{				
-				int flag =0;//numero competenze possedute dal volontario
-				for (Competenza c : comp) //per ogni competenze scelta, controllo che il volontario la possieda
+			{
+				if (volAp.get(i).hasCompetences(comp))//caso positivo, il volontario possiede tutte le competenze richieste, lo restituisco
 				{				
-					if (volAp.get(i).getListaCompetenze().contains(c)) flag++;				
+					volontariCompatibili.add(volAp.get(i));				
 				}
-			if (flag == comp.length)//caso positivo, il volontario possiede tutte le competenze richieste, lo restituisco
-			{				
-				volontariCompatibili.add(volAp.get(i));				
-			}
 			}//fine controllo
 			
 			if(volontariCompatibili.size() != 0)
