@@ -5,8 +5,8 @@ environment.properties
 MyTemplate.war
 
 #eclispe configuration
-.classpath
-.project
+#.classpath
+#.project
 
 #other not necessary files & dirs
 .settings
