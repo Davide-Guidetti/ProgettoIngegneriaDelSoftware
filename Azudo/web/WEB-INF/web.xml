@@ -54,13 +54,13 @@
 	<!-- 3) Welcome Files -->
 	<!-- Define, in order of preference, which file to
 	show when no filename is defined in the path -->
-	<!--
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>pages/azudo/autenticazione.html</welcome-file>
+	</welcome-file-list>
+	<!--
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>serverletUrl</welcome-file>
 	</welcome-file-list>
-	
 	-->
 	<!-- 4) Error Handler -->
 	<!-- Define an error handler for 404 pages -->
