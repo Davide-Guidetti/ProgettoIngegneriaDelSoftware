@@ -9,14 +9,14 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	
+
 	<style>
 		#shiftsTableContainer td {
-			text-align: center; 
+			text-align: center;
 			vertical-align: middle;
 			display: table-cell;
 		}
-		
+
 		#shiftsTableContainer td input[type=checkbox]{
 			position: absolute;
 			margin-top: -0.4rem;
@@ -26,59 +26,66 @@
 
 	<!--JS-->
 	<script>
-	
+
 	//il seguente codice di jquery è in grado di tenere traccia di tutte le checkbox selezionate nella pagina con il valore associato
 	var checkedCompetenze = [];
-	
-	$('#category-list :checkbox').change(function() 
+
+	$('#category-list :checkbox').change(function()
 	{
 		checkedCompetenze = [];
 	    $('#category-list :checkbox').each(function(i, item){
 	        if($(item).is(':checked'))
 	        {
-	        	checkedCompetenze.push($(item).val()); 
+	        	checkedCompetenze.push($(item).val());
 	        }
 	    });
 	   console.log("checkedCompetenze:", checkedCompetenze);
 	})
-	
+
 	function inviaAjaxVolontari(){
+
 		$.ajax({
-			url: 'http://localhost:8080/MyTemplate/', //server per effettuare la query dei volontari in base alle competenze
+			url: 'http://localhost:8070/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
 			type: 'post',
 			data: {
 				listCompetenze: JSON.stringify(checkedCompetenze),
-				comitato: "comitato1"
+				comitato: "Bologna"
 			},
 			success: function (Obj) {
 					console.log("ho ricevuto "+Obj);
+					Obj = JSON.parse(Obj)
 					testo="<h3>VOLONTARI COMPATIBILI:</h3>";
 					testo+="<table class=\"table\">";
 					testo+="<thead class=\"thead-dark\">";
 					testo+="<tr><th>Nome</th><th>Cognome</th><th>Email</th><th>Numero di telefono</th></tr></thead><tbody>";
 					for ( var a=0, b=Obj.length;  a<b;  a++ ) {
-						testo+="<tr><td>"+Obj[a].nome+"</td><td>"+Obj[a].cognome+"</td><td>"+Obj[a].email+"</td><td>"+Obj[a].telefono+"</td></tr>";
+						testo+="<tr><td>"+Obj[a].nome+"</td><td>"+Obj[a].cognome+"</td><td>"+Obj[a].EMail+"</td><td>"+Obj[a].numeroTelefono+"</td></tr>";
 					}
 					testo+="</tbody></table>";
 					document.getElementById("volontari").innerHTML=testo;
 			}
 		});
-		
+
 	}
-	
 
-	
+
+
 	function inviaAjaxCompetenze(){
+		console.log("invio")
 			$.ajax({
-				url: "http://localhost:8080/MyTemplate/", //server per richiedere la lista di competenze presenti
-
+				url: "http://localhost:8070/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+				type: 'post',
 				success: function(Obj){
-					console.log("ho ricevuto "+Obj);
+
+
+					Obj = JSON.parse(Obj)
+
 					//nome oggetto competenza contenente il parametro nome
 					testo="<h3>Competenze </h3><form>";
+
 					for ( var a=0, b=Obj.length;  a<b;  a++ ) {
 						testo += "<div class=\"custom-control custom-checkbox mb-3\">";
-						testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+Obj[a].nome+"\" name=\""+Obj[a].nome+"\">";		
+						testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+Obj[a].nome+"\" name=\""+Obj[a].nome+"\">";
 						testo += "<label class=\"custom-control-label\" for=\"customCheck"+Obj[a].nome+"\">"+Obj[a].nome+"</label>";
 						testo += "</div>";
 					}
@@ -124,22 +131,22 @@
 			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/ModificaDati.html">Profilo</a>
 		</li>
 		</ul>
-		</div>  
+		</div>
 	</nav>
 	<br>
 	<div class="container" style="margin-top:30px">
 		<h2>COMITATO 1</h2>
-		
+
 		<div id="competenze"></div>
-		
-		
+
+
 		<button id="sendButton" type="submit" class="btn btn-primary btn-lg" onclick="inviaAjaxVolontari()">Cerca</button>
 		<br>
-		
+
 		<br>
 
-		<div id="volontari" ></div>  
-		
+		<div id="volontari" ></div>
+
 	  </div>
 
 
@@ -147,7 +154,7 @@
 	<div class="jumbotron text-center" style="margin-bottom:0">
 		<h2>Footer</h2>
 	</div>
-	  
-	
+
+
 </body>
 </html>

@@ -1,10 +1,15 @@
 package it.azudo.DBObjects;
 
 public class Competenza {
-	String Nome;
+	String nome;
 
-	public Competenza(String nome) {
+	public Competenza(String Nome) {
 		super();
-		Nome = nome;
+		this.nome = Nome;
+	}
+	
+	public String getNome()
+	{
+		return this.nome;
 	}
 }

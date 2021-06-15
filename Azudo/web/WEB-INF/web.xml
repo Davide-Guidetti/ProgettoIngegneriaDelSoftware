@@ -88,6 +88,11 @@
 	
 	 -->
 	
+<servlet>
+		<servlet-name>ServletController</servlet-name>
+		<servlet-class>it.unibo.tw.web.servlets.ServletController</servlet-class>
+	</servlet>
+
 
 	<servlet>
 		<servlet-name>MasterServlet</servlet-name>
@@ -209,6 +214,12 @@
 		<servlet-name>MasterServlet</servlet-name>
 		<url-pattern>/masterservlet</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ServletController</servlet-name>
+		<url-pattern>/servletcontroller</url-pattern>
+	</servlet-mapping>
+	
 	
 	<listener>
 		<listener-class>it.unibo.tw.web.examples.MySessionCounter</listener-class>
