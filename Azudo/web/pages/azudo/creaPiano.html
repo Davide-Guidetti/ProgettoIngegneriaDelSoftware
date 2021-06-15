@@ -269,7 +269,7 @@
 				let advancedCompetencesNum = ($("#advancedCompetencesCheck").is(':checked')) ? Number($("#advancedCompetencesNum").val()) : null;
 				if($("#advancedCompetencesCheck").is(':checked') && (isNaN(advancedCompetencesNum) || advancedCompetencesNum < 0 || $("#advancedCompetencesNum").val()=="")){ $("#errorDisplay").text("Numero di volontari avanzati non valido!"); return false;}
 				console.log(baseCompetencesNum + ", " + advancedCompetencesNum);
-				
+				$("#errorDisplay").text("");
 				$("#successDisplay").text("Creazione avvenuta correttamente");
 				
 				e.preventDefault();
