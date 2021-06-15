@@ -39,4 +39,11 @@ public abstract class Volontario {
 		return EMail + " (" + nome + " " + cognome + ")";
 	}
 	
+	public boolean hasCompetences(List<Competenza> competenzeRichieste) {
+		for(Competenza competenzaRichiesta : competenzeRichieste) {
+			if(!this.getListaCompetenze().contains(competenzaRichiesta)) return false;
+		}
+		return true;
+	}
+	
 }

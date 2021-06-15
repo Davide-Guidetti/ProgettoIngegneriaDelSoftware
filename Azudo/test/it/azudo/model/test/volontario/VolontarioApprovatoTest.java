@@ -181,5 +181,18 @@ class VolontarioApprovatoTest {
 		assertEquals(Arrays.asList(), volontario1.getPianiCompatibili(Arrays.asList(piano3)));
 		assertEquals(Arrays.asList(piano3), volontario2.getPianiCompatibili(Arrays.asList(piano3)));
 	}
+	
+	@Test
+	void hasCompetencesTest() {
+		ArrayList<Competenza> listaCompetenze = new ArrayList<Competenza>();
+		listaCompetenze.add(new Competenza("competenza2"));
+		listaCompetenze.add(new Competenza("competenza3"));
+		assertTrue(volontario2.hasCompetences(listaCompetenze));
+		
+		listaCompetenze = new ArrayList<Competenza>();
+		listaCompetenze.add(new Competenza("competenza1"));
+		listaCompetenze.add(new Competenza("competenza4"));
+		assertFalse(volontario2.hasCompetences(listaCompetenze));
+	}
 
 }
