@@ -21,6 +21,8 @@
 	</style>
 	
 	<script>
+	
+	
 		//mettere qui la lista dei comitati che devono essere reperiti dal server
 		let inputCompetences = `["Competenza1","Competenza2","Competenza3"]`;
 		
@@ -267,6 +269,9 @@
 				let advancedCompetencesNum = ($("#advancedCompetencesCheck").is(':checked')) ? Number($("#advancedCompetencesNum").val()) : null;
 				if($("#advancedCompetencesCheck").is(':checked') && (isNaN(advancedCompetencesNum) || advancedCompetencesNum < 0 || $("#advancedCompetencesNum").val()=="")){ $("#errorDisplay").text("Numero di volontari avanzati non valido!"); return false;}
 				console.log(baseCompetencesNum + ", " + advancedCompetencesNum);
+				
+				$("#successDisplay").text("Creazione avvenuta correttamente");
+				
 				e.preventDefault();
 				return false;
 			});
@@ -381,6 +386,7 @@
 		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica" ><br>
 		
 		<p id="errorDisplay" style="color:red;"></p>
+		<p id="successDisplay" style="color:green;"></p>
 	</form>
 
 	<!--footer-->

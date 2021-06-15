@@ -30,7 +30,6 @@
 		var defineApproveTable;
 		
 
-
 		// ------------ DA IMPLEMENTARE: PARTE DI COMUNICAZIONE CON IL SERVER -------------------
 		
 		//a dire il vero qui c'è da dicedere quale approccio di interazione usare, cioè o si invia una richiesta ogni qual volta che si vuole eliminare o aggiungere un elemento,
@@ -72,6 +71,7 @@
 			
 			//promote an element
 			this.approveFunction = function(index){
+				$("#successDisplay").text("");
 				//--------------------------------------------------------------------------------------------------------------------------------
 				let newDefineNoApproveTable = [];
 				for(let i=0; i<this.defineNoApproveTable.length; i++){
@@ -91,6 +91,7 @@
 			//no approve an element
 			this.noApproveFunction = function(index){
 				//--------------------------------------------------------------------------------------------------------------------------------
+				$("#successDisplay").text("");
 				let newDefineApproveTable = [];
 				for(let i=0; i<this.defineApproveTable.length; i++){
 					if(i!=index) {
@@ -170,6 +171,8 @@
 				noApprove = defineTable.defineNoApproveTable;
 				approve = defineTable.defineApproveTable;
 
+				$("#successDisplay").text("Invio avvenuto correttamente");
+				
 				sendNewList(noApprove);
 				sendNewList(approve);
 				e.preventDefault();
@@ -225,7 +228,9 @@
 		<div id="ApproveTableCont"></div>
 		<br>
 		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica" ><br>
+		<p id="successDisplay" style="color:green;"></p>
 	</form>
+	<br>
 	
 	<br>
 	
