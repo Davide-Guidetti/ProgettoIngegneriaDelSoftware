@@ -22,7 +22,7 @@
 			for (let i=1;i<=dim;i++ ){
 				document.getElementById("bodyTable").innerHTML+="<tr><tr><td>PIANO "+i+"</td><td><button onclick=\"myFunction()\" type=\"button\" class=\"btn-danger btn-secondary btn-sm\">Elimina piano</button></td></tr></tr>";
 			}
-			document.getElementById("bodyTable").innerHTML+="<tr><tr><td>NUOVO PIANO</td><td><button onclick=\"myFunction()\" type=\"button\" class=\"btn-success btn-secondary btn-sm\">Crea</button></td></tr></tr>";
+			document.getElementById("bodyTable").innerHTML+="<tr><tr><td>NUOVO PIANO</td><td><a href=\"http://localhost:8080/MyTemplate/pages/azudo/creaPiano.html\"><button onclick=\"myFunction()\" type=\"button\" class=\"btn-success btn-secondary btn-sm\">Crea</button></a></td></tr></tr>";
 			
 		}
 	</script>
@@ -37,26 +37,27 @@
 
 	<!-- navbar-->
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a class="navbar-brand" href="#">Gestione piani</a>
+		<a class="navbar-brand" href="#">Pannello gestione piani</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 		<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-			<a class="nav-link" href="#">Creazione piano</a>
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/approvaVolontari.html">Gestione volontari comitato</a>
 			</li>
 			<li class="nav-item">
-			<a class="nav-link" href="#">Gestione volontari comitato</a>
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/gestionePiani.html">Piani compatibili</a>
 			</li>
 			<li class="nav-item">
-			<a class="nav-link" href="#">Piani accettati</a>
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/listaVolontari.html">Lista volontari</a>
 			</li>
 		</ul>
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item">
-			<a class="nav-link" href="#">Profilo</a>
-		</li>	
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/ModificaDati.html">Profilo</a>
+		</li>
+		</ul>
 		</div>  
 	</nav>
 	<br>

@@ -40,14 +40,14 @@
 	</div>
 	<br>
 	<!--form con controllo inserimento doppio password e inserimento email-->
-	<form id="autenticazione" class="container"  oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords non corrispondono." : "")' style="margin-top:30px" >
+	<form id="autenticazione" class="container"  oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords non corrispondono." : "")' style="margin-top:30px" action="http://localhost:8080/MyTemplate/pages/azudo/autenticazione.html">
 		<h2>REGISTRAZIONE</h2>
 		<br>
 
 		<input type="email" id="username" class="form-control" placeholder="Inserisci email" required><br>
 		<input type="password" id="pwd" class="form-control" placeholder="Inserisci password" name="up" required><br>
 		<input type="password" id="pwd" class="form-control" placeholder="Reinserisci password" name="up2" required><br>
-		<input type="password" id="name" class="form-control" placeholder="Inserisci nome" required><br>
+		<input type="text" id="name" class="form-control" placeholder="Inserisci nome" required><br>
 		<input type="text" id="surname" class="form-control" placeholder="Inserisci cognome" required><br>
 		<input type="text" id="number" class="form-control" placeholder="Inserisci numero di telefono" required><br>
 
