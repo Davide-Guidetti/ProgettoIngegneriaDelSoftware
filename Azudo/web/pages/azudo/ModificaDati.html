@@ -74,10 +74,82 @@
 }
 
 	</style>
+	
+	<script>
+	
+	//il seguente codice di jquery è in grado di tenere traccia di tutte le checkbox selezionate nella pagina con il valore associato
+	var checkedCompetenze = [];
 
+	function getCompetenze(){
+		checkedCompetenze = [];
+		$('#competenze form input').each(function(i, item){
+	 		if($(this).is(':checked')){
+	    		checkedCompetenze.push($(this).attr("name"));
+	    	}
+		});
+		console.log("checkedCompetenze:", checkedCompetenze);
+	}
+		
+	function inviaAjaxCompetenze(){
+		console.log("invio competenze");
+		$.ajax({
+			url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+			type: 'post',
+			data: {
+				email: "giorgio.mocci@gmail.com"
+			},
+			success: function(Obj){
+
+				//mockup test
+				Obj="[ { \"nomeCompetenza\": \"Guidatore ambulanza\", \"checked\":\"true\" }, {\"nomeCompetenza\": \"Sorveglianza pubblica\", \"checked\":\"false\" }, { \"nomeCompetenza\": \"Vigile del fuoco\", \"checked\":\"true\" } ]";
+				Obj = JSON.parse(Obj);
+				console.log(Obj);
+				//nome oggetto competenza contenente il parametro nome
+				testo="<form>";
+				for ( var a=0, b=Obj.length;  a<b;  a++ ) {
+					testo += "<div class=\"custom-control custom-checkbox mb-3\">";
+					if (Obj[a].checked=="true"){
+						console.log(Obj[a].checked);
+						testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+a+"\" name=\""+Obj[a].nomeCompetenza+"\" checked>";
+					}else{
+						console.log(Obj[a].checked);
+						testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+a+"\" name=\""+Obj[a].nomeCompetenza+"\">";
+					}
+					testo += "<label class=\"custom-control-label\" for=\"customCheck"+a+"\">"+Obj[a].nomeCompetenza+"</label>";
+					testo += "</div>";
+				}
+				
+				testo+="</form>";
+				document.getElementById("competenze").innerHTML=testo;
+			}
+		});
+	}
+	
+	function invio(){
+		console.log("invio competenze aggiornate");
+		
+		getCompetenze();
+		
+
+		$.ajax({
+			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+			type: 'post',
+			data: {
+				listCompetenze: JSON.stringify(checkedCompetenze),
+				email: "giorgio.mocci@gmail.com"
+			},
+			success: function (Obj) {
+					console.log("inviato competenze aggiornate ");
+					document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
+			}
+		});
+		
+	}
+	
+	</script>
 
 </head>
-<body>
+<body onload="inviaAjaxCompetenze()">
 	<!-- Title -->
 	<div class="jumbotron text-center" style="margin-bottom:0">
 		<h1>AZUDU</h1>
@@ -177,31 +249,11 @@
 		<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<h6 class="mt-3 mb-2 text-primary">Competenze</h6>
+				<div id="competenze"></div>
 			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="Street">OPSA</label>
-				 <input type="checkbox" name="competenze" value="OPSA" id="OPSA" checked>
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-          <label for="Competenze" class="form-check-label">Operatore Dae</label>
-          <input type="checkbox" name="competenze" value="Operatore Dae" id="Comp_Operatore_Dae">
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-          <label for="Competenze" class="form-check-label">Utilizzo Idrovora</label>
-        <input type="checkbox" name="competenze" value="Utilizzo Idrovora" id="Comp_Utilizzo Idrovora">
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-          <label for="Competenze" class="form-check-label">OPEM</label>
-        <input type="checkbox" name="competenze" value="OPEM" id="Comp_OPEM">
-				</div>
-			</div>
+			
+			
+	
 		</div>
 
     <div class="row gutters">
@@ -224,20 +276,22 @@
 		<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="text-right">
-          <br><br>
+         			 <br><br>
 					<button type="button" id="submit" name="submit" class="btn btn-secondary">Cancella</button>
-					<button type="button" id="submit" name="submit" class="btn btn-primary">Applica</button>
+					<button type="button" id="submit" name="submit" class="btn btn-primary" onclick="invio()">Applica</button>
 				</div>
 			</div>
 		</div>
+			<br>
+				<p id="successDisplay" style="color:green;"></p>
+				<p id="errorDisplay" style="color:red;"></p>
 	</div>
 </div>
 </div>
 </div>
 </div>
 
-
-		<p id="errorDisplay" style="color:red;"></p>
+		
 	</form>
 
 </body>
