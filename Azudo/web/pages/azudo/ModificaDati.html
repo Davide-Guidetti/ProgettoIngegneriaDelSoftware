@@ -82,7 +82,7 @@
 
 	function getCompetenze(){
 		checkedCompetenze = [];
-		$('#competenze form input').each(function(i, item){
+		$('#competenze input').each(function(i, item){
 	 		if($(this).is(':checked')){
 	    		checkedCompetenze.push($(this).attr("name"));
 	    	}
