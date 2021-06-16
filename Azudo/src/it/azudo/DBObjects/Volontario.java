@@ -25,4 +25,8 @@ public class Volontario {
 		IsCoordinatore = isCoordinatore;
 		IsApprovato = isApprovato;
 	}
+	
+	public String getEmail() {
+		return this.EMail;		
+	}
 }

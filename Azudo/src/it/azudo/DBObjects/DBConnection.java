@@ -67,7 +67,9 @@ public class DBConnection {
 		return volontari;
 	}
 	
-	private List<it.azudo.model.volontario.Competenza> getCompetenzeVolotnario(String EMail) {
+	
+	
+	public List<it.azudo.model.volontario.Competenza> getCompetenzeVolotnario(String EMail) {
 		List<it.azudo.model.volontario.Competenza> competenze = new ArrayList<>();
 		for(Possiede rowPossiede: possiede) {
 			if(rowPossiede.EMail.equals(EMail)) {
@@ -76,4 +78,6 @@ public class DBConnection {
 		}
 		return competenze;
 	}
+	
+	
 }
