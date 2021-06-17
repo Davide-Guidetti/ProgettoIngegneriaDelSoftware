@@ -32,6 +32,11 @@ public class Competenza {
 			return false;
 		return true;
 	}
+
+	public String getNome()
+	{
+		return this.nomeCompetenza;
+	}
 	
 	
 }

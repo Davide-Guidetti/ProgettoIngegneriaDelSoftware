@@ -71,9 +71,11 @@ public class DBConnection {
 		List<it.azudo.model.volontario.Competenza> competenze = new ArrayList<>();
 		for(Possiede rowPossiede: possiede) {
 			if(rowPossiede.EMail.equals(EMail)) {
+				
 				competenze.add(new it.azudo.model.volontario.Competenza(rowPossiede.nomeCompetenza));
 			}
 		}
+		
 		return competenze;
 	}
 	
@@ -82,12 +84,14 @@ public class DBConnection {
 		//Elimina le comptenteze del volontario
 		List<Possiede> possiedeTmp = new ArrayList<>(possiede);
 		for(Possiede rowPossiede : possiedeTmp) {
-			if(rowPossiede.EMail.equals(EMail)) {
+			
+			if(rowPossiede.EMail.equals(EMail)) {				
 				possiede.remove(rowPossiede);
 			}
 		}
 		//poi aggiungi tutte quelle nuove
 		for(it.azudo.model.volontario.Competenza competenza : newCompetenze) {
+			
 			possiede.add(new Possiede(competenza.nomeCompetenza(), EMail));
 		}
 	}
