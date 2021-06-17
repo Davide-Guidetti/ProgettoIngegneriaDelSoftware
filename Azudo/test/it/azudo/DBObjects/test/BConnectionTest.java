@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.azudo.DBObjects.Competenza;
@@ -18,8 +19,8 @@ class BConnectionTest {
 	
 	static List<Competenza> competenze;
 
-	@BeforeAll
-	public static void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() throws Exception {
 		competenze = new ArrayList<>();
 		competenze.add(new Competenza("Guidatore ambulanza"));
 		competenze.add(new Competenza("Sorveglianza pubblica"));
@@ -52,7 +53,22 @@ class BConnectionTest {
 	
 	@Test
 	void testGetCompenteze() {
-		assertEquals(competenze, DBConnection.getDBConnection().getCompetenze());
+		List<it.azudo.model.volontario.Competenza> res = DBConnection.getDBConnection().getCompetenze();
+		assertEquals(competenze.size(), res.size());
+		for(Competenza competenza : competenze) {
+			assertTrue(containsCompetenza(res, competenza.getNome()));
+		}
+	}
+	
+	private boolean containsCompetenza(List<it.azudo.model.volontario.Competenza> res, String competenza) {
+		boolean found = false;
+		for(it.azudo.model.volontario.Competenza compRes : res) {
+			if(compRes.nomeCompetenza().equals(competenza)) {
+				found = true;
+				break;
+			}
+		}
+		return found;
 	}
 	
 	@Test
@@ -70,6 +86,23 @@ class BConnectionTest {
 			if(v.getEMail().equals(EMail)) return true;
 		}
 		return false;
+	}
+	
+	@Test
+	public void setCompetenzeVolotnarioTest() {
+		
+		List<it.azudo.model.volontario.Competenza> newCompetenze = new ArrayList<>();
+		newCompetenze.add(new it.azudo.model.volontario.Competenza("Guidatore ambulanza"));
+		newCompetenze.add(new it.azudo.model.volontario.Competenza("Vigile del fuoco"));
+		newCompetenze.add(new it.azudo.model.volontario.Competenza("Sorveglianza pubblica"));
+		
+		DBConnection.getDBConnection().setCompetenzeVolotnario("giorgio.mocci@studio.unibo.it", newCompetenze);
+		
+		List<it.azudo.model.volontario.Competenza> res = DBConnection.getDBConnection().getCompetenze();
+		assertEquals(competenze.size(), newCompetenze.size());
+		for(it.azudo.model.volontario.Competenza competenza : newCompetenze) {
+			assertTrue(containsCompetenza(res, competenza.nomeCompetenza()));
+		}
 	}
 
 }
