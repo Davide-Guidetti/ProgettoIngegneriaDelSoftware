@@ -119,11 +119,12 @@ public class ServletController extends HttpServlet {
 			// prendi la stringa con il comitato al suo interno, se vuota vuol dire che devo
 			// restituire le competenze
 			String Comitato = request.getParameter("comitato");
+			String JSONStr = request.getParameter("listCompetenze");
 			if (Comitato == null && email == null)// restituisco array competenze
 			{
 				out.write(g.toJson(competenze.toArray()));
-			} else {
-				String JSONStr = request.getParameter("listCompetenze");
+			} 
+			else if (Comitato != null && JSONStr!=null){
 				System.out.println(JSONStr);
 				String competStr[] = g.fromJson(JSONStr, String[].class);
 				List<Competenza> comp = new ArrayList<Competenza>();
@@ -149,6 +150,9 @@ public class ServletController extends HttpServlet {
 					out.write(g.toJson(volontariCompatibili.toArray()));
 				}
 
+			}
+			else if (Comitato!=null) {
+				//
 			}
 		}
 	}

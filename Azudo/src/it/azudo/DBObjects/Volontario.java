@@ -1,7 +1,5 @@
 package it.azudo.DBObjects;
 
-import it.azudo.model.volontario.Comitato;
-
 public class Volontario {
 	String Comitato;
 	String EMail;

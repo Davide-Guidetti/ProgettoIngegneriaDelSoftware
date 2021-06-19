@@ -33,17 +33,17 @@ public class DBConnection {
 		competenze.add(new Competenza("Sorveglianza pubblica"));
 		competenze.add(new Competenza("Vigile del fuoco"));
 		
-		volontario.add(new Volontario("Bologna", "giorgio.mocci@studio.unibo.it", "fdjahsbgdjsa", "Giorgio", "Mocci", "3474516549", false, true));
+		volontario.add(new Volontario("Bologna", "giorgio.mocci@studio.unibo.it", "fdjahsbgdjsa", "Giorgio", "Mocci", "3474516549", true, true));
 		possiede.add(new Possiede("Guidatore ambulanza", "giorgio.mocci@studio.unibo.it"));
 		possiede.add(new Possiede("Vigile del fuoco", "giorgio.mocci@studio.unibo.it"));
 		
 		volontario.add(new Volontario("Bologna", "loris.giannatempo@studio.unibo.it", "afdegwerhbr", "Loris", "Giannatempo", "3474324521", false, true));
 		possiede.add(new Possiede("Vigile del fuoco", "loris.giannatempo@studio.unibo.it"));
 		
-		volontario.add(new Volontario("Bologna", "davide.guidetti@studio.unibo.it", "fdasgasdtr", "Davide", "Guidetti", "3475417235", true, true));
+		volontario.add(new Volontario("Bologna", "davide.guidetti@studio.unibo.it", "fdasgasdtr", "Davide", "Guidetti", "3475417235", false, true));
 		possiede.add(new Possiede("Sorveglianza pubblica", "davide.guidetti@studio.unibo.it"));
 		
-		volontario.add(new Volontario("Boh", "sconosciuto.boh@libero.it", "ahgeafgasa", "sconosciuto", "boh", "347432125", false, true));
+		volontario.add(new Volontario("Bologna", "sconosciuto.boh@libero.it", "ahgeafgasa", "sconosciuto", "boh", "347432125", false, false));
 		possiede.add(new Possiede("Vigile del fuoco", "sconosciuto.boh@libero.it"));
 		possiede.add(new Possiede("Sorveglianza pubblica", "sconosciuto.boh@libero.it"));
 	}

@@ -20,7 +20,7 @@
 			//here request Ajax to server to see compatible plan
 			dim=5;
 			for (let i=1;i<=dim;i++ ){
-				document.getElementById("bodyTable").innerHTML+="<tr><tr><td>COMITATO "+i+"</td><td><button onclick=\"myFunction()\" type=\"button\" class=\"btn btn-secondary btn-sm\">Vai</button></td></tr></tr>";
+				document.getElementById("bodyTable").innerHTML+="<tr><tr><td>COMITATO "+i+"</td><td><a href=\"http://localhost:8080/MyTemplate/pages/azudo/gestioneCoordinatori.html\"> <button onclick=\"myFunction()\" type=\"button\" class=\"btn btn-secondary btn-sm\">Vai</button></a></td></tr></tr>";
 			}
 			
 		}
@@ -36,27 +36,24 @@
 
 	<!-- navbar-->
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a class="navbar-brand" href="#">Piani compatibili</a>
+		
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 		<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-			<a class="nav-link" href="#">Creazione piano</a>
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/gestioneComitati.html">Gestione comitati</a>
 			</li>
 			<li class="nav-item">
-			<a class="nav-link" href="#">Gestione volontari comitato</a>
+			<a class="navbar-brand">Selezione gestione coordinatori</a>
 			</li>
 			<li class="nav-item">
-			<a class="nav-link" href="#">Piani accettati</a>
+			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/gestioneCompetenze.html">Gestione competenze</a>
 			</li>
+			
 		</ul>
-		<ul class="navbar-nav ml-auto">
-			<li class="nav-item">
-			<a class="nav-link" href="#">Profilo</a>
-		</li>	
-		</div>  
+		</div>    
 	</nav>
 	<br>
 	<!--table-->

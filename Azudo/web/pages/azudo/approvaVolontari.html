@@ -35,36 +35,22 @@
 		var competenzeApprove= ["Guidatore ambulanza, Vigile del fuoco","Vigile del fuoco","Sorveglianza pubblica"];
 		var defineCompetenzeApproveTable;
 		
-		// ------------ DA IMPLEMENTARE: PARTE DI COMUNICAZIONE CON IL SERVER -------------------
-		
-		//a dire il vero qui c'è da dicedere quale approccio di interazione usare, cioè o si invia una richiesta ogni qual volta che si vuole eliminare o aggiungere un elemento,
-		// o si effettuanno tutte le modifiche del caso lato client e si invia la nuova lista server side. Sarà poi il server ad accorgersi che cosa è stato eliminato e cosa è stato aggiunto
-		// se si sceglie il primo approccio usare le prime 2 funzioni e eliminare la 3a e il pulsante applica
-		// se si sceglie il secondo eliminare le prime 2 funzioni e implemetare la terza
-		
-		function sendAddRequest(name){
-			console.log("sending add request for \"" + name + "\" to server");
-			//qui bisognerà inviare la richiesta di aggiunta al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
-			//defineCoordinatorsTable.Coordinators = nuovo_array_di_competenze
-			//defineCoordinatorsTable.renderCoordinatorsTable()
+		function volontari(){
+			$.ajax({
+				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					Comitato: "Bologna",
+				},
+				success: function(Obj){
+					Obj = JSON.parse(Obj);
+					console.log(Obj);
+					
+				}
+			});
 		}
-		
-		function sendDeleteRequest(name){
-			console.log("sending delete request for \"" + name + "\" to server");
-			//qui bisognerà inviare la richiesta di eliminazione al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
-			//defineCoordinatorsTable.Coordinators = nuovo_array_di_competenze
-			//defineCoordinatorsTable.renderCoordinatorsTable()
-		}
-		
-		function sendNewList(list){
-			console.log("sending new list to server for to server");
-			console.log(list);
-			//qui bisognerà inviare la richiesta di aggiornamento al server, e aspettare la risposta con la nuova lista di competenze: caricarli usando:
-			//defineCoordinatorsTable.Coordinators = nuovo_array_di_competenze
-			//defineCoordinatorsTable.renderCoordinatorsTable()
-		}
-		
-		// --------------------------------------------------------------------------------------
+		volontari();
 
 		
 		//function definition table
@@ -201,7 +187,7 @@
 	
 	</script>
 </head>
-<body onload="isCoordinatore()">
+<body >
 	<!-- Title -->
 	<div class="jumbotron text-center" style="margin-bottom:0">
 		<h1>AZUDU</h1>
