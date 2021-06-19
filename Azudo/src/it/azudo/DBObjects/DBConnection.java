@@ -48,7 +48,7 @@ public class DBConnection {
 		possiede.add(new Possiede("Sorveglianza pubblica", "sconosciuto.boh@libero.it"));
 	}
 	
-	//retrun the system registered competences
+	//return the system registered competences
 	public List<it.azudo.model.volontario.Competenza> getCompetenze() {
 		List<it.azudo.model.volontario.Competenza> res = new ArrayList<>();
 		for (Competenza c : competenze) { 
@@ -66,12 +66,23 @@ public class DBConnection {
 		return null;
 	}
 	
-	//restituisce i volotari approvati (con anche le competenze possedute)
-	public List<VolontarioApprovato> getVolontariComitato(String comitato) {
+	//restituisce i volotari approvati (con anche le competenze possedute) 
+	public List<VolontarioApprovato> getVolontariApprovatiComitato(String comitato) {
 		List<VolontarioApprovato> volontari = new ArrayList<>();
 		for(Volontario v : volontario) {
 			if(v.IsApprovato && v.Comitato.equals(comitato)) {
 				volontari.add(new VolontarioApprovato(v.Nome, v.Cognome, v.EMail, v.NumeroTelefono, getCompetenzeVolotnario(v.EMail), new Comitato(v.Comitato), v.IsCoordinatore));
+			}
+		}
+		return volontari;
+	}
+	
+	//restituisce i volontari approvati o in attesa di approvazione di un comitato non coordinatori
+	public List<Volontario> getVolontariComitato(String comitato) {
+		List<Volontario> volontari = new ArrayList<>();
+		for(Volontario v : volontario) {
+			if(v.Comitato.equals(comitato)  && !v.IsCoordinatore) {
+				volontari.add(v);
 			}
 		}
 		return volontari;

@@ -28,6 +28,14 @@ public class Volontario {
 		return this.EMail;		
 	}
 	
+	public String getComitato() {
+		return this.Comitato;
+	}
+	
+	public Boolean isApprove() {
+		return this.IsApprovato;
+	}
+	
 	public void setNumeroTelefono(String numeroTelefono) {
 		this.NumeroTelefono=numeroTelefono;
 	}
@@ -45,5 +53,9 @@ public class Volontario {
 			IsApprovato=false;
 		}
 		return false;
+	}
+	
+	public void setApprove(Boolean result) {
+		this.IsApprovato=result;
 	}
 }

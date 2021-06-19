@@ -23,16 +23,16 @@
 	<script>
 		var defineTable;
 
-		var noApprove = ["volontarioDaApprovare"]; 
+		var noApprove = []; 
 		var defineNoApproveTable;
 		
-		var competenzeNoApprove= ["Guidatore ambulanza"];
+		var competenzeNoApprove= []; 
 		var defineCompetenzeNoApproveTable;
 
-		var approve = ["giorgio.mocci@studio.unibo.it:","loris.giannatempo@studio.unibo.it","davide.guidetti@studio.unibo.it"];
+		var approve = []; 
 		var defineApproveTable;
 		
-		var competenzeApprove= ["Guidatore ambulanza, Vigile del fuoco","Vigile del fuoco","Sorveglianza pubblica"];
+		var competenzeApprove= []; 
 		var defineCompetenzeApproveTable;
 		
 		function volontari(){
@@ -41,16 +41,50 @@
 				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
 				type: 'post',
 				data: {
-					Comitato: "Bologna",
+					comitato: "Bologna",
 				},
 				success: function(Obj){
-					Obj = JSON.parse(Obj);
 					console.log(Obj);
+					Obj = JSON.parse(Obj);
+					for ( var a=0, b=Obj.length;  a<b;  a++ ) {
+						if (Obj[a].isApprove=="true"){
+							console.log("true");
+							console.log(Obj[a].email);
+							console.log(Obj[a].competenze);
+							approve.push(Obj[a].email);
+							competenzeApprove.push(Obj[a].competenze);
+						}else{
+							console.log("false");
+							console.log(Obj[a].email);
+							console.log(Obj[a].competenze);
+							noApprove.push(Obj[a].email);
+							competenzeNoApprove.push(Obj[a].competenze);
+						}
+					}
 					
 				}
 			});
 		}
 		volontari();
+		
+		function aggiornaVolontari(){
+			noApprove = defineTable.defineNoApproveTable;
+			approve = defineTable.defineApproveTable;
+			$.ajax({
+				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					noApprove : JSON.stringify(noApprove),
+					approve : JSON.stringify(approve)
+				},
+				success: function(Obj){
+					Obj = JSON.parse(Obj);
+					console.log(Obj);
+					$("#successDisplay").text("Invio avvenuto correttamente");
+				}
+			});
+		}
 
 		
 		//function definition table
@@ -111,7 +145,7 @@
 
 			//displays the list of elements in table
 			this.renderNoApproveTable = function(){		
-				let table = $('<table class="col-lg-9 col-sm-4">');
+				let table = $('<table class="col-lg-10 col-sm-6">');
 				let row;
 				table.append($('<tr>').html('<th>Email volontari da approvare</th><th>Competenze</th><th>Azione</th>'));
 				
@@ -136,7 +170,7 @@
 
 			//displays the list of elements in table
 			this.renderApproveTable = function(){
-				let table = $('<table class="col-lg-9 col-sm-4">');
+				let table = $('<table class="col-lg-10 col-sm-6">');
 				let row;
 				table.append($('<tr>').html('<th>Email volontari approvati</th><th>Competenze</th><th>Azione</th>'));
 				
@@ -175,7 +209,6 @@
 				noApprove = defineTable.defineNoApproveTable;
 				approve = defineTable.defineApproveTable;
 
-				$("#successDisplay").text("Invio avvenuto correttamente");
 				
 				sendNewList(noApprove);
 				sendNewList(approve);
@@ -229,7 +262,7 @@
 		<br>
 		<div id="ApproveTableCont"></div>
 		<br>
-		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica" ><br>
+		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica" onclick="aggiornaVolontari()"><br>
 		<p id="successDisplay" style="color:green;"></p>
 	</form>
 	<br>

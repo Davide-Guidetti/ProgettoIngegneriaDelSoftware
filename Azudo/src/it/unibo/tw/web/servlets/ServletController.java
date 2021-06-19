@@ -19,6 +19,7 @@ import it.azudo.DBObjects.DBConnection;
 import it.azudo.DBObjects.Volontario;
 import it.azudo.model.volontario.VolontarioApprovato;
 import it.unibo.tw.web.beans.CompetenzaCheck;
+import it.unibo.tw.web.beans.VolontarioCompetenze;
 
 public class ServletController extends HttpServlet {
 
@@ -54,6 +55,20 @@ public class ServletController extends HttpServlet {
 		
 		
 		String Skills=request.getParameter("Skills");
+		
+		
+		String noApprove=request.getParameter("noApprove");
+		String approve=request.getParameter("approve");
+		if (noApprove!=null || approve!=null) {
+			String volontariNoApprove [] =g.fromJson(noApprove, String[].class);
+			String volontariApprove [] =g.fromJson(approve, String[].class);
+			for (String v:volontariNoApprove) {
+				DB.getVolontario(v).setApprove(Boolean.FALSE);
+			}
+			for (String v:volontariApprove) {
+				DB.getVolontario(v).setApprove(Boolean.TRUE);
+			}
+		}
 		
 		if (Skills!=null) {
 			String competenzeSistema[] = g.fromJson(Skills, String[].class);
@@ -134,7 +149,7 @@ public class ServletController extends HttpServlet {
 				for (Competenza c : comp)
 					System.out.println(c.nomeCompetenza());
 
-				List<VolontarioApprovato> volAp = DB.getVolontariComitato(Comitato);
+				List<VolontarioApprovato> volAp = DB.getVolontariApprovatiComitato(Comitato);
 				List<VolontarioApprovato> volontariCompatibili = new ArrayList<>();
 
 				for (int i = 0; i < volAp.size(); i++) // ciclo tutti i volontari del comitato
@@ -152,7 +167,23 @@ public class ServletController extends HttpServlet {
 
 			}
 			else if (Comitato!=null) {
-				//
+				
+				List<Volontario> volontariComitato=DB.getVolontariComitato(Comitato);
+				List<VolontarioCompetenze> volontarioCompetenze=new ArrayList<>();
+				String competenze="";
+				
+				for (Volontario v: volontariComitato) {
+					List<Competenza> com=DB.getCompetenzeVolotnario(v.getEmail());
+					for (Competenza c: com) {
+						competenze+=c.getNome()+", ";
+					}
+					competenze = competenze.substring(0, competenze.length() - 2);
+					System.out.println(competenze);
+					volontarioCompetenze.add(new VolontarioCompetenze(v.getEmail(),v.getComitato(), competenze, v.isApprove().toString()));
+					competenze="";
+				}
+				
+				out.write(g.toJson(volontarioCompetenze.toArray()));
 			}
 		}
 	}
