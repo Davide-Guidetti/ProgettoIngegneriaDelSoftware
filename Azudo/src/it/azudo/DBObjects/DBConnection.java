@@ -3,8 +3,8 @@ package it.azudo.DBObjects;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.azudo.model.volontario.Comitato;
-import it.azudo.model.volontario.Competenza;
+//import it.azudo.model.volontario.Comitato;
+//import it.azudo.model.volontario.Competenza;
 import it.azudo.model.volontario.VolontarioApprovato;
 
 public class DBConnection {
@@ -23,6 +23,7 @@ public class DBConnection {
 	public List<Competenza> competenze;
 	public List<Volontario> volontario;
 	public List<Possiede> possiede; //associazione volontario-competenza
+	public List<Comitato> comitato;
 	
 	private void initDB() {
 		competenze = new ArrayList<>();
@@ -71,14 +72,25 @@ public class DBConnection {
 		List<VolontarioApprovato> volontari = new ArrayList<>();
 		for(Volontario v : volontario) {
 			if(v.IsApprovato && v.Comitato.equals(comitato)) {
-				volontari.add(new VolontarioApprovato(v.Nome, v.Cognome, v.EMail, v.NumeroTelefono, getCompetenzeVolotnario(v.EMail), new Comitato(v.Comitato), v.IsCoordinatore));
+				volontari.add(new VolontarioApprovato(v.Nome, v.Cognome, v.EMail, v.NumeroTelefono, getCompetenzeVolotnario(v.EMail), new it.azudo.model.volontario.Comitato(v.Comitato), v.IsCoordinatore));
+			}
+		}
+		return volontari;
+	}
+	
+	//restituisce i volontari approvati o in attesa di approvazione di un comitato
+	public List<VolontarioApprovato> getVolontariComitato(String comitato) {
+		List<VolontarioApprovato> volontari = new ArrayList<>();
+		for(Volontario v : volontario) {
+			if(v.Comitato.equals(comitato)) {
+				volontari.add(new VolontarioApprovato(v.Nome, v.Cognome, v.EMail, v.NumeroTelefono, getCompetenzeVolotnario(v.EMail), new it.azudo.model.volontario.Comitato(v.Comitato), v.IsCoordinatore));
 			}
 		}
 		return volontari;
 	}
 	
 	//restituisce i volontari approvati o in attesa di approvazione di un comitato non coordinatori
-	public List<Volontario> getVolontariComitato(String comitato) {
+	public List<Volontario> getVolontariCoordinatoriComitato(String comitato) {
 		List<Volontario> volontari = new ArrayList<>();
 		for(Volontario v : volontario) {
 			if(v.Comitato.equals(comitato)  && !v.IsCoordinatore) {
@@ -157,5 +169,54 @@ public class DBConnection {
 			
 			possiede.add(new Possiede(competenza.nomeCompetenza(), EMail));
 		}
+	}
+	
+	public List<it.azudo.model.volontario.Comitato> getComitati() {
+		List<it.azudo.model.volontario.Comitato> comitati = new ArrayList<>();;
+		for(Comitato c : this.comitato) {
+			comitati.add(new it.azudo.model.volontario.Comitato(c.getNome()));
+		}
+		return comitati;
+	}
+	
+	//crea i nuovi comitati, elimina quelli vecchi (espellendo quelli che vi erano associati)
+	public void setComitati(List<it.azudo.model.volontario.Comitato> newComitati) {
+		List<Comitato> updatedComitati = new ArrayList<>();
+		//ora creo quelli che sono nella nuova lista e che non sono già all'interno del database 
+		for(it.azudo.model.volontario.Comitato NC : newComitati) {
+			Comitato comitato;
+			if( (comitato = getComitatoByName(NC.getNomeComitato())) != null) { //il comitato deve continuare ad esiste: aggiungerlo alla nuova lista
+				updatedComitati.add(comitato);
+			}else { //il comitato deve essere creato ex novo
+				updatedComitati.add(new Comitato(NC.getNomeComitato()));
+			}
+		}
+		//elimino i comitati che al momento sono nel database, e che non sono nella nuova lista
+		for(Comitato C : comitato) {
+			//il comitato deve essere rimosso (ammesso che esista.. magari non lo troviamo perchè è nuovo, ma si pensiamo dopo a crearlo): espulsione di tutti i volontari dal comitato
+			boolean found = false;
+			for(it.azudo.model.volontario.Comitato NC : newComitati) {
+				if(NC.getNomeComitato().equals(C.getNome())) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				List<Volontario> volontarioTmpRead = new ArrayList<>(volontario);
+				for(Volontario v : volontarioTmpRead) {
+					if(v.Comitato.equals(C.getNome())) {
+						volontario.remove(v);
+					}
+				}
+			}
+		}
+		comitato=updatedComitati;
+	}
+	
+	private Comitato getComitatoByName(String name) {
+		for(Comitato p : comitato) {
+			if(p.getNome().equals(name)) return p;
+		}
+		return null;
 	}
 }

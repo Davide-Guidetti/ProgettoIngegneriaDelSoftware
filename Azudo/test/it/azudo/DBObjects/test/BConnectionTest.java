@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.azudo.DBObjects.Comitato;
 import it.azudo.DBObjects.Competenza;
 import it.azudo.DBObjects.DBConnection;
 import it.azudo.DBObjects.Possiede;
@@ -21,6 +22,12 @@ class BConnectionTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
+		List<Comitato> comitato = new ArrayList<>();
+		comitato.add(new Comitato("Bosa"));
+		comitato.add(new Comitato("Castel san pietro"));
+		comitato.add(new Comitato("Castel guelfo"));
+		DBConnection.getDBConnection().comitato = comitato;
+		
 		competenze = new ArrayList<>();
 		competenze.add(new Competenza("Guidatore ambulanza"));
 		competenze.add(new Competenza("Sorveglianza pubblica"));
@@ -41,7 +48,7 @@ class BConnectionTest {
 		volontari.add(new Volontario("Bosa", "davide.guidetti@studio.unibo.it", "fdasgasdtr", "Davide", "Guidetti", "3475417235", true, true));
 		possiede.add(new Possiede("Sorveglianza pubblica", "davide.guidetti@studio.unibo.it"));
 		
-		volontari.add(new Volontario("Boh", "sconosciuto.boh@libero.it", "ahgeafgasa", "sconosciuto", "boh", "347432125", false, true));
+		volontari.add(new Volontario("Castel san pietro", "sconosciuto.boh@libero.it", "ahgeafgasa", "sconosciuto", "boh", "347432125", false, true));
 		possiede.add(new Possiede("Vigile del fuoco", "sconosciuto.boh@libero.it"));
 		possiede.add(new Possiede("Sorveglianza pubblica", "sconosciuto.boh@libero.it"));
 		
@@ -103,6 +110,44 @@ class BConnectionTest {
 		for(it.azudo.model.volontario.Competenza competenza : newCompetenze) {
 			assertTrue(containsCompetenza(res, competenza.nomeCompetenza()));
 		}
+	}
+	
+	@Test
+	public void getComitatiTest() {
+		List<it.azudo.model.volontario.Comitato> resList = new ArrayList<>();
+		resList = DBConnection.getDBConnection().getComitati();
+		assertEquals(3, resList.size());
+		assertTrue(containsComitato("Bosa", resList));
+		assertTrue(containsComitato("Castel san pietro", resList));
+		assertTrue(containsComitato("Castel guelfo", resList));
+	}
+	
+	private boolean containsComitato(String nome, List<it.azudo.model.volontario.Comitato> resList) {
+		for(it.azudo.model.volontario.Comitato v : resList) {
+			if(v.getNomeComitato().equals(nome)) return true;
+		}
+		return false;
+	}
+	
+	@Test
+	public void setComitatiTest() {
+		List<it.azudo.model.volontario.Comitato> newComitati = new ArrayList<>();
+		newComitati.add(new it.azudo.model.volontario.Comitato("Castel san pietro"));
+		newComitati.add(new it.azudo.model.volontario.Comitato("Ravenna"));
+		DBConnection.getDBConnection().setComitati(newComitati);
+		
+		List<it.azudo.model.volontario.Comitato> resList = new ArrayList<>();
+		resList = DBConnection.getDBConnection().getComitati();
+		assertEquals(2, resList.size());
+		assertTrue(containsComitato("Castel san pietro", resList));
+		assertTrue(containsComitato("Ravenna", resList));
+		
+		List<it.azudo.model.volontario.VolontarioApprovato> resList2;
+		resList2 = DBConnection.getDBConnection().getVolontariComitato("Bosa");
+		assertEquals(0, resList2.size());
+		resList2 = DBConnection.getDBConnection().getVolontariComitato("Castel san pietro");
+		assertEquals(1, resList2.size());
+		assertTrue(containsVolontario("sconosciuto.boh@libero.it", resList2));
 	}
 
 }

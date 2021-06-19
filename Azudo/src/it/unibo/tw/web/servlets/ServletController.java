@@ -170,7 +170,7 @@ public class ServletController extends HttpServlet {
 			}
 			else if (Comitato!=null) {
 				
-				List<Volontario> volontariComitato=DB.getVolontariComitato(Comitato);
+				List<Volontario> volontariComitato=DB.getVolontariCoordinatoriComitato(Comitato);
 				List<VolontarioCompetenze> volontarioCompetenze=new ArrayList<>();
 				String competenze="";
 				
