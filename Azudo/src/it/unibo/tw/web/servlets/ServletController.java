@@ -51,6 +51,15 @@ public class ServletController extends HttpServlet {
 		
 		//controllo approvazione 
 		String isApprove=request.getParameter("isApprove");
+		
+		
+		String Skills=request.getParameter("Skills");
+		
+		if (Skills!=null) {
+			String competenzeSistema[] = g.fromJson(Skills, String[].class);
+			DB.removePossiede(competenzeSistema);
+		}
+		
 
 		if (email!=null && isApprove!=null) {
 			Volontario v=DB.getVolontario(email);

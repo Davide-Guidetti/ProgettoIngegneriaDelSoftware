@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.azudo.model.volontario.Comitato;
+import it.azudo.model.volontario.Competenza;
 import it.azudo.model.volontario.VolontarioApprovato;
 
 public class DBConnection {
@@ -86,6 +87,48 @@ public class DBConnection {
 		}
 		
 		return competenze;
+	}
+	
+	public void removePossiede(String[] competenzeSistema ) {
+		List<String> competenzeEliminate=new ArrayList<>();
+		int controllo;
+		for (Competenza c: competenze) {
+			controllo=0;
+			for (String s: competenzeSistema) {
+				if (c.getNome().equalsIgnoreCase(s)) {
+					controllo=1;
+				}
+			}
+			if (controllo==0) {
+				competenzeEliminate.add(c.getNome());
+			}
+		}
+		
+		//
+		System.out.println(competenzeEliminate);
+		
+		List<Possiede> newPossiede=new ArrayList<>();
+		for(Possiede rowPossiede: possiede) {
+			controllo=0;
+			for (String s: competenzeEliminate) {
+				if(rowPossiede.nomeCompetenza.equals(s)) {
+					controllo=1;
+				}
+			}
+			if (controllo==0) {
+				newPossiede.add(rowPossiede);
+			}
+		}
+		possiede=newPossiede;
+		
+	    List<Competenza> newCompetenze=new ArrayList<>();
+	    
+	    for (String s: competenzeSistema) {
+	    	newCompetenze.add(new Competenza(s));
+	    }
+	    competenze=newCompetenze;
+	    
+	    
 	}
 	
 	//rimpiazza le vecchie competenze del volontario con quelle nuove
