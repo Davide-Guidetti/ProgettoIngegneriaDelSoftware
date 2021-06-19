@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 
 import it.azudo.model.volontario.Competenza;
 import it.azudo.DBObjects.DBConnection;
+import it.azudo.DBObjects.Volontario;
 import it.azudo.model.volontario.VolontarioApprovato;
 import it.unibo.tw.web.beans.CompetenzaCheck;
 
@@ -83,6 +84,15 @@ public class ServletController extends HttpServlet {
 
 				out.write(g.toJson(check.toArray()));
 			}
+			
+			//controllo numero di telefono
+			String phone = request.getParameter("phone");
+			if (phone!=null) {
+				System.out.println("phone: "+phone);
+				Volontario v=DB.getVolontario(email);
+				v.setNumeroTelefono(phone);
+			}
+			
 		} else {
 			// prendi la stringa con il comitato al suo interno, se vuota vuol dire che devo
 			// restituire le competenze

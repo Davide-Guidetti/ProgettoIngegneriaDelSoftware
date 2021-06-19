@@ -56,6 +56,15 @@ public class DBConnection {
 		return res;
 	}
 	
+	public Volontario getVolontario(String email) {
+		for (Volontario v : volontario) { 
+			if (v.getEmail().equals(email)) {
+				return v;
+			}
+		}
+		return null;
+	}
+	
 	//restituisce i volotari approvati (con anche le competenze possedute)
 	public List<VolontarioApprovato> getVolontariComitato(String comitato) {
 		List<VolontarioApprovato> volontari = new ArrayList<>();

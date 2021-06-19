@@ -89,6 +89,7 @@
 		});
 		console.log("checkedCompetenze:", checkedCompetenze);
 	}
+	
 
 	function inviaAjaxCompetenze(){
 		console.log("invio competenze iniziali");
@@ -129,20 +130,45 @@
 		console.log("invio competenze aggiornate");
 
 		getCompetenze();
+		
+		//check inserimento corretto numbero
+		var numb=$("#phoneNumber").val();
+		var matcher= new RegExp("[0-9]{3}[0-9]{3}[0-9]{4}");
+		var foundNumber = matcher.test(numb);
+		console.log("found: "+foundNumber);
+		console.log("numbero telefono "+ numb);
 
-
-		$.ajax({
-			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
-			type: 'post',
-			data: {
-				listCompetenze: JSON.stringify(checkedCompetenze),
-				email: "giorgio.mocci@studio.unibo.it"
-			},
-			success: function (Obj) {
-					console.log("inviato competenze aggiornate ");
-					document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
-			}
-		});
+		if (foundNumber== true){
+			$.ajax({
+				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+				type: 'post',
+				data: {
+					listCompetenze: JSON.stringify(checkedCompetenze),
+					email: "giorgio.mocci@studio.unibo.it",
+					phone: numb
+				},
+				success: function (Obj) {
+						console.log("inviato competenze aggiornate ");
+						console.log("inviato numero di telefono");
+						document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
+				}
+			});
+		}
+		else
+		{
+			$.ajax({
+				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+				type: 'post',
+				data: {
+					listCompetenze: JSON.stringify(checkedCompetenze),
+					email: "giorgio.mocci@studio.unibo.it"
+				},
+				success: function (Obj) {
+						console.log("inviato competenze aggiornate ");
+						document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
+				}
+			});
+		}
 
 	}
 
@@ -220,23 +246,23 @@
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="phone">Telefono</label>
-					<input type="text" class="form-control" id="phone" placeholder="123 456 789">
+					<input type="tel" class="form-control" id="phoneNumber" placeholder="1234567890">
 				</div>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="website">Comitato di appartenenza</label>
-				<!--	<input type="url" class="form-control" id="website" placeholder="Bologna"> -->
-				<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="Bologna" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Bologna
-  </button>
-  <div class="dropdown-menu" aria-labelledby="Bologna">
-    <a class="dropdown-item" href="#">Bologna</a>
-    <a class="dropdown-item" href="#">Imola</a>
-    <a class="dropdown-item" href="#">Ravenna</a>
-  </div>
-</div>
+					<!--	<input type="url" class="form-control" id="website" placeholder="Bologna"> -->
+					<div class="dropdown">
+					  <button class="btn btn-secondary dropdown-toggle" type="button" id="Bologna" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					    Bologna
+					  </button>
+					  <div class="dropdown-menu" aria-labelledby="Bologna">
+					    <a class="dropdown-item" href="#">Bologna</a>
+					    <a class="dropdown-item" href="#">Imola</a>
+					    <a class="dropdown-item" href="#">Ravenna</a>
+					  </div>
+					</div>
 
 				</div>
 			</div>

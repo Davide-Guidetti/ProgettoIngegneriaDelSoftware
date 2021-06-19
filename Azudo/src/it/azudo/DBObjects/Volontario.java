@@ -29,4 +29,12 @@ public class Volontario {
 	public String getEmail() {
 		return this.EMail;		
 	}
+	
+	public void setNumeroTelefono(String numeroTelefono) {
+		this.NumeroTelefono=numeroTelefono;
+	}
+	
+	public String getNumeroTelefono() {
+		return this.NumeroTelefono;		
+	}
 }
