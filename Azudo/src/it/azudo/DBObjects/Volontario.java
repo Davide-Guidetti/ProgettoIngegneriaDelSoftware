@@ -37,4 +37,15 @@ public class Volontario {
 	public String getNumeroTelefono() {
 		return this.NumeroTelefono;		
 	}
+	
+	public boolean controlloComitato(String comitato) {
+		if (this.Comitato.equals(comitato) && IsApprovato==true) {
+			return true;
+		}
+		if (!this.Comitato.equals(comitato)) {
+			this.Comitato=comitato;
+			IsApprovato=false;
+		}
+		return false;
+	}
 }

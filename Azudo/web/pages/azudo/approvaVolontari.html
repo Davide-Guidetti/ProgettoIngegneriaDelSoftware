@@ -23,10 +23,10 @@
 	<script>
 		var defineTable;
 
-		var noApprove = ["volontario1", "volonatario2"]; 
+		var noApprove = ["volontarioDaApprovare: Guidatore ambulanza"]; 
 		var defineNoApproveTable;
 
-		var approve = ["volontario3"];
+		var approve = ["giorgio.mocci@studio.unibo.it: Guidatore ambulanza, Vigile del fuoco","loris.giannatempo@studio.unibo.it: Vigile del fuoco","davide.guidetti@studio.unibo.it: Sorveglianza pubblica"];
 		var defineApproveTable;
 		
 
@@ -109,7 +109,7 @@
 
 			//displays the list of elements in table
 			this.renderNoApproveTable = function(){		
-				let table = $('<table class="col-lg-3 col-sm-4">');
+				let table = $('<table class="col-lg-7 col-sm-4">');
 				let row;
 				table.append($('<tr>').html('<th>Nome volontari da approvare</th><th>Azione</th>'));
 				
@@ -133,7 +133,7 @@
 
 			//displays the list of elements in table
 			this.renderApproveTable = function(){
-				let table = $('<table class="col-lg-3 col-sm-4">');
+				let table = $('<table class="col-lg-7 col-sm-4">');
 				let row;
 				table.append($('<tr>').html('<th>Nome volontari approvati</th><th>Azione</th>'));
 				

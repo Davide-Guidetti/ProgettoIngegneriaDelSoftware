@@ -100,7 +100,6 @@
 				email: "giorgio.mocci@studio.unibo.it"
 			},
 			success: function(Obj){
-
 				//mockup test
 				//Obj="[ { \"nomeCompetenza\": \"Guidatore ambulanza\", \"checked\":\"true\" }, {\"nomeCompetenza\": \"Sorveglianza pubblica\", \"checked\":\"false\" }, { \"nomeCompetenza\": \"Vigile del fuoco\", \"checked\":\"true\" } ]";
 				Obj = JSON.parse(Obj);
@@ -124,6 +123,29 @@
 				document.getElementById("competenze").innerHTML=testo;
 			}
 		});
+		
+		var comitato=$("#comitato").val();
+		console.log("comitato d'appartenenza "+comitato);
+		$.ajax({
+			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+			type: 'post',
+			data: {
+				email: "giorgio.mocci@studio.unibo.it",
+				isApprove: comitato
+			},
+			success: function (Obj) {
+					console.log("isApprove "+Obj);
+					if (Obj == "true"){
+						document.getElementById("isApproveComitato").innerHTML="Approvato nel comitato";
+						$("#isApproveComitato").css({'color':'green'});
+					}
+					else{
+						document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";
+						$("#isApproveComitato").css({'color':'red'});
+					}
+			}
+		});
+		
 	}
 
 	function invio(){
@@ -170,6 +192,28 @@
 			});
 		}
 
+		var comitato=$("#comitato").val();
+		console.log("comitato d'appartenenza "+comitato);
+		$.ajax({
+			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+			type: 'post',
+			data: {
+				email: "giorgio.mocci@studio.unibo.it",
+				isApprove: comitato
+			},
+			success: function (Obj) {
+					console.log("isApprove "+Obj);
+					if (Obj == "true"){
+						document.getElementById("isApproveComitato").innerHTML="Approvato nel comitato";
+						$("#isApproveComitato").css({'color':'green'});
+					}
+					else{
+						document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";
+						$("#isApproveComitato").css({'color':'red'});
+					}
+			}
+		});
+		
 	}
 
 	</script>
@@ -254,16 +298,14 @@
 					<label for="website">Comitato di appartenenza</label>
 					<!--	<input type="url" class="form-control" id="website" placeholder="Bologna"> -->
 					<div class="dropdown">
-					  <button class="btn btn-secondary dropdown-toggle" type="button" id="Bologna" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					    Bologna
-					  </button>
-					  <div class="dropdown-menu" aria-labelledby="Bologna">
-					    <a class="dropdown-item" href="#">Bologna</a>
-					    <a class="dropdown-item" href="#">Imola</a>
-					    <a class="dropdown-item" href="#">Ravenna</a>
-					  </div>
+					  <select class="custom-select" id="comitato">
+					 	  <option selected>Bologna</option>
+						  <option value="Imola">Imola</option>
+					 	  <option value="Ravenna">Ravenna</option>
+					  </select>
 					</div>
-
+					
+					<div id="isApproveComitato"></div>
 				</div>
 			</div>
 		</div>

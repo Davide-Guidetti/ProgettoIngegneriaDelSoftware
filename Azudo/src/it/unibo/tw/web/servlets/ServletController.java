@@ -48,8 +48,19 @@ public class ServletController extends HttpServlet {
 		// restituzione competenza volontario
 		String email = request.getParameter("email");
 
+		
+		//controllo approvazione 
+		String isApprove=request.getParameter("isApprove");
+
+		if (email!=null && isApprove!=null) {
+			Volontario v=DB.getVolontario(email);
+			out.write(String.valueOf(v.controlloComitato(isApprove)));
+		}
+		else
 		if (email != null) {
 			String listCompetenze = request.getParameter("listCompetenze");
+			
+			
 			if (listCompetenze != null) {
 				// salvataggio nel volontario delle competenze checked
 				System.out.println(email + listCompetenze);
@@ -84,6 +95,8 @@ public class ServletController extends HttpServlet {
 
 				out.write(g.toJson(check.toArray()));
 			}
+			
+			
 			
 			//controllo numero di telefono
 			String phone = request.getParameter("phone");
