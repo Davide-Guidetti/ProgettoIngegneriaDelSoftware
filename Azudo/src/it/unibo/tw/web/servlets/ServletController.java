@@ -59,6 +59,8 @@ public class ServletController extends HttpServlet {
 		
 		String noApprove=request.getParameter("noApprove");
 		String approve=request.getParameter("approve");
+		
+		
 		if (noApprove!=null || approve!=null) {
 			String volontariNoApprove [] =g.fromJson(noApprove, String[].class);
 			String volontariApprove [] =g.fromJson(approve, String[].class);

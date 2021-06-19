@@ -23,37 +23,27 @@
 	<script>
 		var committees = ["Bologna", "Imola", "Ravenna"]; //QUI IL SERVER DEVE INSERIRE I COMITATI GIA' ESISTENTI
 		var defineCommitteesTable;
-	
-		// ------------ DA IMPLEMENTARE: PARTE DI COMUNICAZIONE CON IL SERVER -------------------
 		
-		//a dire il vero qui c'è da dicedere quale approccio di interazione usare, cioè o si invia una richiesta ogni qual volta che si vuole eliminare o aggiungere un elemento,
-		// o si effettuanno tutte le modifiche del caso lato client e si invia la nuova lista server side. Sarà poi il server ad accorgersi che cosa è stato eliminato e cosa è stato aggiunto
-		// se si sceglie il primo approccio usare le prime 2 funzioni e eliminare la 3a e il pulsante applica
-		// se si sceglie il secondo eliminare le prime 2 funzioni e implemetare la terza
-		
-		function sendAddRequest(name){
-			console.log("sending add request for \"" + name + "\" to server");
-			//qui bisognerà inviare la richiesta di aggiunta al server, e aspettare la risposta con la nuova lista di comitati: caricarli usando:
-			//defineCommitteesTable.committees = nuovo_array_di_comitati
-			//defineCommitteesTable.renderCommitteesTable()
+		function comitati(){
+			$.ajax({
+				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					comitatoRequest="true"
+				},
+				success: function(Obj){
+					Obj = JSON.parse(Obj);
+					console.log(Obj);
+					console.log( Object.keys(Obj).length);
+					for(var i = 0; i < Object.keys(Obj).length; i += 1){
+						console.log(Obj[i]);
+						Skills.push(Obj[i]);
+					}
+				}
+			});
 		}
-		
-		function sendDeleteRequest(name){
-			console.log("sending delete request for \"" + name + "\" to server");
-			//qui bisognerà inviare la richiesta di eliminazione al server, e aspettare la risposta con la nuova lista di comitati: caricarli usando:
-			//defineCommitteesTable.committees = nuovo_array_di_comitati
-			//defineCommitteesTable.renderCommitteesTable()
-		}
-		
-		function sendNewList(list){
-			console.log("sending new list to server for to server");
-			console.log(list);
-			//qui bisognerà inviare la richiesta di aggiornamento al server, e aspettare la risposta con la nuova lista di comitati: caricarli usando:
-			//defineCommitteesTable.committees = nuovo_array_di_comitati
-			//defineCommitteesTable.renderCommitteesTable()
-		}
-		
-		// --------------------------------------------------------------------------------------
+		competenze();
 
 		function DefineCommitteesTable(jqeryHtmlContainerBox, committees){
 			this.defineCommitteesTable = committees;
