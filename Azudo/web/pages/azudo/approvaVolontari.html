@@ -23,13 +23,18 @@
 	<script>
 		var defineTable;
 
-		var noApprove = ["volontarioDaApprovare: Guidatore ambulanza"]; 
+		var noApprove = ["volontarioDaApprovare"]; 
 		var defineNoApproveTable;
+		
+		var competenzeNoApprove= ["Guidatore ambulanza"];
+		var defineCompetenzeNoApproveTable;
 
-		var approve = ["giorgio.mocci@studio.unibo.it: Guidatore ambulanza, Vigile del fuoco","loris.giannatempo@studio.unibo.it: Vigile del fuoco","davide.guidetti@studio.unibo.it: Sorveglianza pubblica"];
+		var approve = ["giorgio.mocci@studio.unibo.it:","loris.giannatempo@studio.unibo.it","davide.guidetti@studio.unibo.it"];
 		var defineApproveTable;
 		
-
+		var competenzeApprove= ["Guidatore ambulanza, Vigile del fuoco","Vigile del fuoco","Sorveglianza pubblica"];
+		var defineCompetenzeApproveTable;
+		
 		// ------------ DA IMPLEMENTARE: PARTE DI COMUNICAZIONE CON IL SERVER -------------------
 		
 		//a dire il vero qui c'è da dicedere quale approccio di interazione usare, cioè o si invia una richiesta ogni qual volta che si vuole eliminare o aggiungere un elemento,
@@ -63,26 +68,33 @@
 
 		
 		//function definition table
-		function DefineTable(jqeryHtmlContainerNoApprove,noApprove,jqeryHtmlContainerApprove, approve){
+		function DefineTable(jqeryHtmlContainerNoApprove,noApprove,jqeryHtmlContainerApprove, approve, competenzeNoApprove, competenzeApprove){
 			this.defineNoApproveTable = noApprove;
 			this.jqeryHtmlContainerNoApprove = jqeryHtmlContainerNoApprove;
 			this.defineApproveTable = approve;
 			this.jqeryHtmlContainerApprove = jqeryHtmlContainerApprove;
+			
+			this.defineCompetenzeApproveTable = competenzeApprove;
+			this.defineCompetenzeNoApproveTable = competenzeNoApprove;
 			
 			//promote an element
 			this.approveFunction = function(index){
 				$("#successDisplay").text("");
 				//--------------------------------------------------------------------------------------------------------------------------------
 				let newDefineNoApproveTable = [];
+				let newDefineCompetenzeNoApproveTable = [];
 				for(let i=0; i<this.defineNoApproveTable.length; i++){
 					if(i!=index) {
 						newDefineNoApproveTable.push(this.defineNoApproveTable[i]);
+						newDefineCompetenzeNoApproveTable.push(this.defineCompetenzeNoApproveTable[i]);
 					}
 					else{
 						this.defineApproveTable.push(this.defineNoApproveTable[i]);
+						this.defineCompetenzeApproveTable.push(this.defineCompetenzeNoApproveTable[i]);
 					}
 				}
 				this.defineNoApproveTable = newDefineNoApproveTable;
+				this.defineCompetenzeNoApproveTable = newDefineCompetenzeNoApproveTable;
 				this.renderNoApproveTable();
 				this.renderApproveTable();
 				//--------------------------------------------------------------------------------------------------------------------------------
@@ -93,15 +105,19 @@
 				//--------------------------------------------------------------------------------------------------------------------------------
 				$("#successDisplay").text("");
 				let newDefineApproveTable = [];
+				let newDefineCompetenzeApproveTable = [];
 				for(let i=0; i<this.defineApproveTable.length; i++){
 					if(i!=index) {
 						newDefineApproveTable.push(this.defineApproveTable[i]);
+						newDefineCompetenzeApproveTable.push(this.defineCompetenzeApproveTable[i]);
 					}
 					else{
 						this.defineNoApproveTable.push(this.defineApproveTable[i]);
+						this.defineCompetenzeNoApproveTable.push(this.defineCompetenzeApproveTable[i]);
 					}
 				}
 				this.defineApproveTable = newDefineApproveTable;
+				this.defineCompetenzeApproveTable = newDefineCompetenzeApproveTable;
 				this.renderNoApproveTable();
 				this.renderApproveTable();
 				//--------------------------------------------------------------------------------------------------------------------------------
@@ -109,9 +125,9 @@
 
 			//displays the list of elements in table
 			this.renderNoApproveTable = function(){		
-				let table = $('<table class="col-lg-7 col-sm-4">');
+				let table = $('<table class="col-lg-9 col-sm-4">');
 				let row;
-				table.append($('<tr>').html('<th>Nome volontari da approvare</th><th>Azione</th>'));
+				table.append($('<tr>').html('<th>Email volontari da approvare</th><th>Competenze</th><th>Azione</th>'));
 				
 				console.log("No approve:");
 				for(let i=0; i<this.defineNoApproveTable.length; i++){
@@ -119,6 +135,7 @@
 					row = $('<tr>').attr("elementRowIndex", i);
 					let promoteBtn = $('<button type="button" class="btn btn-secondary btn-success btn-sm mr-1" onClick="defineTable.approveFunction(' + i + ')">Approva</button>');
 					row.append($('<td>').text(this.defineNoApproveTable[i]));
+					row.append($('<td>').text(this.defineCompetenzeNoApproveTable[i]));
 					row.append($('<td>').append(promoteBtn));
 					table.append(row);
 				}
@@ -133,9 +150,9 @@
 
 			//displays the list of elements in table
 			this.renderApproveTable = function(){
-				let table = $('<table class="col-lg-7 col-sm-4">');
+				let table = $('<table class="col-lg-9 col-sm-4">');
 				let row;
-				table.append($('<tr>').html('<th>Nome volontari approvati</th><th>Azione</th>'));
+				table.append($('<tr>').html('<th>Email volontari approvati</th><th>Competenze</th><th>Azione</th>'));
 				
 				console.log("Approve:");
 				for(let i=0; i<this.defineApproveTable.length; i++){
@@ -143,6 +160,7 @@
 					row = $('<tr>').attr("elementRowIndex", i);
 					let downgradeBtn = $('<button type="button" class="btn btn-secondary btn-danger btn-sm mr-1" onClick="defineTable.noApproveFunction(' + i + ')">espelli</button>');
 					row.append($('<td>').text(this.defineApproveTable[i]));
+					row.append($('<td>').text(this.defineCompetenzeApproveTable[i]));
 					row.append($('<td>').append(downgradeBtn));
 					table.append(row);
 				}
@@ -160,10 +178,10 @@
 		$(document).ready(function(){
 			
 			//comitato del coordinatore
-			$("#Comitato").html("<h2><b>COMITATO X</b></h2>");
+			$("#Comitato").html("<h2><b>COMITATO BOLOGNA</b></h2>");
 
 			//deinisco le liste dei volontari e dei coordinatori
-			defineTable = new DefineTable($("#NoApproveTableCont"),noApprove,$("#ApproveTableCont"),approve);
+			defineTable = new DefineTable($("#NoApproveTableCont"),noApprove,$("#ApproveTableCont"),approve,competenzeNoApprove,competenzeApprove);
 			defineTable.renderNoApproveTable();
 			defineTable.renderApproveTable();
 
@@ -180,12 +198,10 @@
 			});
 		});
 		
-		
-		
-		
+	
 	</script>
 </head>
-<body>
+<body onload="isCoordinatore()">
 	<!-- Title -->
 	<div class="jumbotron text-center" style="margin-bottom:0">
 		<h1>AZUDU</h1>

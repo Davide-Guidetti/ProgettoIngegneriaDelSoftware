@@ -142,6 +142,7 @@
 					else{
 						document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";
 						$("#isApproveComitato").css({'color':'red'});
+						$("#collapsibleNavbar").html("<ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");
 					}
 			}
 		});
@@ -149,7 +150,7 @@
 	}
 
 	function invio(){
-		console.log("invio competenze aggiornate");
+		console.log("invio informazioni aggiornate");
 
 		getCompetenze();
 		
@@ -159,61 +160,75 @@
 		var foundNumber = matcher.test(numb);
 		console.log("found: "+foundNumber);
 		console.log("numbero telefono "+ numb);
-
-		if (foundNumber== true){
-			$.ajax({
-				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
-				type: 'post',
-				data: {
-					listCompetenze: JSON.stringify(checkedCompetenze),
-					email: "giorgio.mocci@studio.unibo.it",
-					phone: numb
-				},
-				success: function (Obj) {
-						console.log("inviato competenze aggiornate ");
-						console.log("inviato numero di telefono");
-						document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
-				}
-			});
-		}
-		else
-		{
-			$.ajax({
-				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
-				type: 'post',
-				data: {
-					listCompetenze: JSON.stringify(checkedCompetenze),
-					email: "giorgio.mocci@studio.unibo.it"
-				},
-				success: function (Obj) {
-						console.log("inviato competenze aggiornate ");
-						document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
-				}
-			});
-		}
-
-		var comitato=$("#comitato").val();
-		console.log("comitato d'appartenenza "+comitato);
-		$.ajax({
-			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
-			type: 'post',
-			data: {
-				email: "giorgio.mocci@studio.unibo.it",
-				isApprove: comitato
-			},
-			success: function (Obj) {
-					console.log("isApprove "+Obj);
-					if (Obj == "true"){
-						document.getElementById("isApproveComitato").innerHTML="Approvato nel comitato";
-						$("#isApproveComitato").css({'color':'green'});
-					}
-					else{
-						document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";
-						$("#isApproveComitato").css({'color':'red'});
-					}
-			}
-		});
 		
+		var nuovaPwd=$("#nuovaPwd").val();
+		var nuovaPwdDue=$("#nuovaPwdDue").val();
+		
+		if (nuovaPwd != nuovaPwdDue){
+			document.getElementById("successDisplay").innerHTML="";
+			document.getElementById("errorDisplay").innerHTML="Errore inserimento password";
+		}
+		else{
+			if (foundNumber== true){
+				$.ajax({
+					url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+					type: 'post',
+					data: {
+						listCompetenze: JSON.stringify(checkedCompetenze),
+						email: "giorgio.mocci@studio.unibo.it",
+						phone: numb
+					},
+					success: function (Obj) {
+							console.log("inviato competenze aggiornate ");
+							console.log("inviato numero di telefono");
+							document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
+							document.getElementById("errorDisplay").innerHTML="";
+					}
+				});
+			}
+			else
+			{
+				$.ajax({
+					url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+					type: 'post',
+					data: {
+						listCompetenze: JSON.stringify(checkedCompetenze),
+						email: "giorgio.mocci@studio.unibo.it"
+					},
+					success: function (Obj) {
+							console.log("inviato competenze aggiornate ");
+							document.getElementById("successDisplay").innerHTML="Aggiornamento profilo avvenuto correttamente";
+							document.getElementById("errorDisplay").innerHTML="";
+					}
+				});
+			}
+	
+			var comitato=$("#comitato").val();
+			console.log("comitato d'appartenenza "+comitato);
+			$.ajax({
+				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+				type: 'post',
+				data: {
+					email: "giorgio.mocci@studio.unibo.it",
+					isApprove: comitato
+				},
+				success: function (Obj) {
+						console.log("isApprove "+Obj);
+						if (Obj == "true"){
+							document.getElementById("isApproveComitato").innerHTML="Approvato nel comitato";
+							$("#isApproveComitato").css({'color':'green'});
+						}
+						else{
+							document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";
+							$("#isApproveComitato").css({'color':'red'});
+							
+							//navbar di volontari non approvati
+							$("#collapsibleNavbar").html("<ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");
+							
+						}
+				}
+			});
+		}
 	}
 
 	</script>
@@ -262,99 +277,99 @@
 		<br>
 
     <div class="container">
-<div class="row gutters">
-<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-<div class="card h-100">
-	<div class="card-body">
-		<div class="account-settings">
-			<div class="user-profile">
-
-					<img src="../../images/Azudu.png" alt="Logo" >
-					<br><br>
-				<h5 class="user-name">    Giorgio Mocci</h5>
-				<h6 class="user-email">   giorgio.mocci@studio.unibo.it</h6>
+	<div class="row gutters">
+	<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+	<div class="card h-100">
+		<div class="card-body">
+			<div class="account-settings">
+				<div class="user-profile">
+	
+						<img src="../../images/Azudu.png" alt="Logo" >
+						<br><br>
+					<h5 class="user-name">    Giorgio Mocci</h5>
+					<h6 class="user-email">   giorgio.mocci@studio.unibo.it</h6>
+				</div>
+	
 			</div>
-
 		</div>
 	</div>
-</div>
-</div>
-<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-<div class="card h-100">
-	<div class="card-body">
-		<div class="row gutters">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<h6 class="mb-2 text-primary">Modifica Dettagli Personali</h6>
-			</div>
-
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="phone">Telefono</label>
-					<input type="tel" class="form-control" id="phoneNumber" placeholder="1234567890">
+	</div>
+	<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+	<div class="card h-100">
+		<div class="card-body">
+			<div class="row gutters">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<h6 class="mb-2 text-primary">Modifica Dettagli Personali</h6>
 				</div>
-			</div>
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="website">Comitato di appartenenza</label>
-					<!--	<input type="url" class="form-control" id="website" placeholder="Bologna"> -->
-					<div class="dropdown">
-					  <select class="custom-select" id="comitato">
-					 	  <option selected>Bologna</option>
-						  <option value="Imola">Imola</option>
-					 	  <option value="Ravenna">Ravenna</option>
-					  </select>
+	
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="phone">Telefono</label>
+						<input type="tel" class="form-control" id="phoneNumber" placeholder="1234567890">
 					</div>
-					
-					<div id="isApproveComitato"></div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<div class="form-group">
+						<label for="website">Comitato di appartenenza</label>
+						<!--	<input type="url" class="form-control" id="website" placeholder="Bologna"> -->
+						<div class="dropdown">
+						  <select class="custom-select" id="comitato">
+						 	  <option selected>Bologna</option>
+							  <option value="Imola">Imola</option>
+						 	  <option value="Ravenna">Ravenna</option>
+						  </select>
+						</div>
+						
+						<div id="isApproveComitato"></div>
+					</div>
 				</div>
 			</div>
-		</div>
-
-
-
-
-
-		<div class="row gutters">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<h6 class="mt-3 mb-2 text-primary">Competenze</h6>
-				<div id="competenze"></div>
+	
+	
+	
+	
+	
+			<div class="row gutters">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<h6 class="mt-3 mb-2 text-primary">Competenze</h6>
+					<div id="competenze"></div>
+				</div>
+	
+	
+	
 			</div>
-
-
-
-		</div>
-
-    <div class="row gutters">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-        <h6 class="mt-3 mb-2 text-primary">Modifica Password</h6>
-      </div>
-      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-        <div class="form-group">
-          <label for="Street">Nuova password</label>
-         	<input type="text" class="form-control" id="phone" placeholder="nuova password">
-        </div>
-      </div>
-      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-        <div class="form-group">
-          <label for="Street">Conferma nuova password</label>
-          <input type="text" class="form-control" id="phone" placeholder="Conferma password">
-        </div>
-      </div>
-
-		<div class="row gutters">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="text-right">
-         			 <br><br>
-					<button type="button" id="submit" name="submit" class="btn btn-secondary">Cancella</button>
-					<button type="button" id="submit" name="submit" class="btn btn-primary" onclick="invio()">Applica</button>
+	
+	    <div class="row gutters">
+	      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	        <h6 class="mt-3 mb-2 text-primary">Modifica Password</h6>
+	      </div>
+	      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+	        <div class="form-group">
+	          <label for="Street">Nuova password</label>
+	         	<input type="password" class="form-control" id="nuovaPwd"  placeholder="nuova password">
+	        </div>
+	      </div>
+	      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+	        <div class="form-group">
+	          <label for="Street">Conferma nuova password</label>
+	          <input type="password" class="form-control" id="nuovaPwdDue" placeholder="Conferma password">
+	        </div>
+	      </div>
+	
+			<div class="row gutters">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="text-right">
+	         			 <br><br>
+						<button type="button" id="submit" name="submit" class="btn btn-secondary">Cancella</button>
+						<button type="button" id="submit" name="submit" class="btn btn-primary"  onclick="invio()">Applica</button>
+					</div>
 				</div>
 			</div>
+				<br>
+					<p id="successDisplay" style="color:green;"></p>
+					<p id="errorDisplay" style="color:red;"></p>
 		</div>
-			<br>
-				<p id="successDisplay" style="color:green;"></p>
-				<p id="errorDisplay" style="color:red;"></p>
 	</div>
-</div>
 </div>
 </div>
 </div>
