@@ -18,60 +18,60 @@
     background: #f5f6fa;
     position: relative;
     height: 100%;
-}
-.account-settings .user-profile {
-    margin: 0 0 1rem 0;
-    padding-bottom: 1rem;
-    text-align: center;
-}
-.account-settings .user-profile .user-avatar {
-    margin: 0 0 1rem 0;
-}
-.account-settings .user-profile .user-avatar img {
-    width: 90px;
-    height: 90px;
-    -webkit-border-radius: 100px;
-    -moz-border-radius: 100px;
-    border-radius: 100px;
-}
-.account-settings .user-profile h5.user-name {
-    margin: 0 0 0.5rem 0;
-}
-.account-settings .user-profile h6.user-email {
-    margin: 0;
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: #9fa8b9;
-}
-.account-settings .about {
-    margin: 2rem 0 0 0;
-    text-align: center;
-}
-.account-settings .about h5 {
-    margin: 0 0 15px 0;
-    color: #007ae1;
-}
-.account-settings .about p {
-    font-size: 0.825rem;
-}
-.form-control {
-    border: 1px solid #cfd1d8;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    font-size: .825rem;
-    background: #ffffff;
-    color: #2e323c;
-}
-
-.card {
-    background: #ffffff;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border: 0;
-    margin-bottom: 1rem;
-}
+	}
+	.account-settings .user-profile {
+	    margin: 0 0 1rem 0;
+	    padding-bottom: 1rem;
+	    text-align: center;
+	}
+	.account-settings .user-profile .user-avatar {
+	    margin: 0 0 1rem 0;
+	}
+	.account-settings .user-profile .user-avatar img {
+	    width: 90px;
+	    height: 90px;
+	    -webkit-border-radius: 100px;
+	    -moz-border-radius: 100px;
+	    border-radius: 100px;
+	}
+	.account-settings .user-profile h5.user-name {
+	    margin: 0 0 0.5rem 0;
+	}
+	.account-settings .user-profile h6.user-email {
+	    margin: 0;
+	    font-size: 0.8rem;
+	    font-weight: 400;
+	    color: #9fa8b9;
+	}
+	.account-settings .about {
+	    margin: 2rem 0 0 0;
+	    text-align: center;
+	}
+	.account-settings .about h5 {
+	    margin: 0 0 15px 0;
+	    color: #007ae1;
+	}
+	.account-settings .about p {
+	    font-size: 0.825rem;
+	}
+	.form-control {
+	    border: 1px solid #cfd1d8;
+	    -webkit-border-radius: 2px;
+	    -moz-border-radius: 2px;
+	    border-radius: 2px;
+	    font-size: .825rem;
+	    background: #ffffff;
+	    color: #2e323c;
+	}
+	
+	.card {
+	    background: #ffffff;
+	    -webkit-border-radius: 5px;
+	    -moz-border-radius: 5px;
+	    border-radius: 5px;
+	    border: 0;
+	    margin-bottom: 1rem;
+	}
 
 	</style>
 
@@ -164,8 +164,11 @@
 					$("#isApproveComitato").css({'color':'green'});
 					if (Obj.split(",")[1] == "false"){ //non è coordinatore
 						$("#collapsibleNavbar").html("<ul class=\"navbar-nav\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/PannelloGestionePiani.html\">Pannello gestione piani</a></li></ul><ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");
+						document.getElementById("role").innerHTML="<br><h5 class=\"mb-2 text-primary\">Ruolo</h5><h5 class=\"user-name\">Volontario</h5>";
 					}else{ //è un coordinatore
 						$("#collapsibleNavbar").html("<ul class=\"navbar-nav\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/PannelloGestionePiani.html\">Pannello gestione piani</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/approvaVolontari.html\">Gestione volontari comitato</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/gestionePiani.html\">Piani compatibili</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/listaVolontari.html\">Lista volontari</a></li></ul><ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");								
+						console.log("ruolo coordinatore");
+						document.getElementById("role").innerHTML="<br><h5 class=\"mb-2 text-primary\">Ruolo</h5><h5 class=\"user-name\">Coordinatore</h5>";
 					}
 				}
 				else{ //non è approvato
@@ -252,8 +255,11 @@
 						$("#isApproveComitato").css({'color':'green'});
 						if (Obj.split(",")[1] == "false"){ //non è coordinatore
 							$("#collapsibleNavbar").html("<ul class=\"navbar-nav\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/PannelloGestionePiani.html\">Pannello gestione piani</a></li></ul><ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");
+							document.getElementById("role").innerHTML="<br><h5 class=\"mb-2 text-primary\">Ruolo</h5><h5 class=\"user-name\">Volontario</h5>";
 						}else{ //è un coordinatore
 							$("#collapsibleNavbar").html("<ul class=\"navbar-nav\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/PannelloGestionePiani.html\">Pannello gestione piani</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/approvaVolontari.html\">Gestione volontari comitato</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/gestionePiani.html\">Piani compatibili</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/listaVolontari.html\">Lista volontari</a></li></ul><ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");								
+							console.log("ruolo coordinatore");
+							document.getElementById("role").innerHTML="<br><h5 class=\"mb-2 text-primary\">Ruolo</h5><h5 class=\"user-name\">Coordinatore</h5>";
 						}
 					}
 					else{ //non è approvato
@@ -300,11 +306,12 @@
 		<div class="card-body">
 			<div class="account-settings">
 				<div class="user-profile">
-	
-						<img src="../../images/Azudu.png" alt="Logo" >
-						<br><br>
+					<img src="../../images/Azudu.png" alt="Logo" >
+					<br><br>
 					<h5 class="user-name">    Giorgio Mocci</h5>
 					<h6 class="user-email">   giorgio.mocci@studio.unibo.it</h6>
+					
+					<div id="role"></div>
 				</div>
 	
 			</div>
@@ -386,7 +393,7 @@
 </div>
 </div>
 </div>
-
+</div>
 
 	</form>
 
