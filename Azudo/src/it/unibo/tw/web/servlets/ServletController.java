@@ -83,7 +83,7 @@ public class ServletController extends HttpServlet {
 			
 			for (String v : volontariComitato) {
 				DB.getVolontario(v).setCoordinatore(Boolean.FALSE);
-				DB.getVolontario(v).setApprove(Boolean.FALSE);
+				
 			}
 			for (String v : coordinatoriComitato) {
 				DB.getVolontario(v).setCoordinatore(Boolean.TRUE);
@@ -140,7 +140,7 @@ public class ServletController extends HttpServlet {
 		} else if (email != null && isApprove != null) {
 			Volontario v = DB.getVolontario(email);
 			System.out.println(isApprove);
-			out.write(String.valueOf(v.controlloComitato(isApprove)));
+			out.write(String.valueOf(v.controlloComitato(isApprove))+","+String.valueOf(v.isCoordinatore()));
 		} else if (email != null) {
 			String listCompetenze = request.getParameter("listCompetenze");
 
