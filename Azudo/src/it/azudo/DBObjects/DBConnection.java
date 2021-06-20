@@ -49,7 +49,7 @@ public class DBConnection {
 		volontario.add(new Volontario("Bologna", "davide.guidetti@studio.unibo.it", "fdasgasdtr", "Davide", "Guidetti", "3475417235", false, true));
 		possiede.add(new Possiede("Sorveglianza pubblica", "davide.guidetti@studio.unibo.it"));
 		
-		volontario.add(new Volontario("Bologna", "sconosciuto.boh@libero.it", "ahgeafgasa", "sconosciuto", "boh", "347432125", false, false));
+		volontario.add(new Volontario("Bologna", "sconosciuto.boh@libero.it", "ahgeafgasa", "sconosciuto", "boh", "3475417236", false, false));
 		possiede.add(new Possiede("Vigile del fuoco", "sconosciuto.boh@libero.it"));
 		possiede.add(new Possiede("Sorveglianza pubblica", "sconosciuto.boh@libero.it"));
 		
