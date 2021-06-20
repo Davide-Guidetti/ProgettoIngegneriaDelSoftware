@@ -39,6 +39,24 @@
 		});
 		console.log("checkedCompetenze:", checkedCompetenze);
 	}
+	
+	var comitato;
+	function getComitato(){
+		$.ajax({
+			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+			async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+			type: 'post',
+			data: {
+				email: "giorgio.mocci@studio.unibo.it",
+				getComitato: true
+			},
+			success: function (Obj) {
+					console.log("ho ricevuto "+Obj);
+					comitato=Obj;
+			}
+		});
+	}
+	getComitato();
 
 	function inviaAjaxVolontari(){
 		getCompetenze()
@@ -48,10 +66,9 @@
 			type: 'post',
 			data: {
 				listCompetenze: JSON.stringify(checkedCompetenze),
-				comitato: "Bologna"
+				comitato: comitato
 			},
 			success: function (Obj) {
-					console.log("ho ricevuto "+Obj);
 					Obj = (Obj != "") ? JSON.parse(Obj) : [];
 					testo="<h3>VOLONTARI COMPATIBILI:</h3>";
 					testo+="<table class=\"table\">";
@@ -76,9 +93,8 @@
 
 
 				Obj = JSON.parse(Obj)
-
 				//nome oggetto competenza contenente il parametro nome
-				testo="<h3>Competenze </h3><form>";
+				testo="<h2>Comitato "+comitato+"</h2><h3>Competenze </h3><form>";
 
 				for ( var a=0, b=Obj.length;  a<b;  a++ ) {
 					testo += "<div class=\"custom-control custom-checkbox mb-3\">";
@@ -132,7 +148,8 @@
 	</nav>
 	<br>
 	<div class="container" style="margin-top:30px">
-		<h2>COMITATO BOLOGNA</h2>
+	
+		<div id="scrittaComitato"></div>
 
 		<div id="competenze"></div>
 

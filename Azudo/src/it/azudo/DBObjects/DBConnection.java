@@ -32,8 +32,8 @@ public class DBConnection {
 		comitato = new ArrayList<>();
 		
 		comitato.add(new Comitato("Bologna"));
-		comitato.add(new Comitato("Castel san pietro"));
-		comitato.add(new Comitato("Castel guelfo"));
+		comitato.add(new Comitato("Castel San Pietro"));
+		comitato.add(new Comitato("Castel Guelfo"));
 		
 		competenze.add(new Competenza("Guidatore ambulanza"));
 		competenze.add(new Competenza("Sorveglianza pubblica"));
@@ -52,6 +52,9 @@ public class DBConnection {
 		volontario.add(new Volontario("Bologna", "sconosciuto.boh@libero.it", "ahgeafgasa", "sconosciuto", "boh", "347432125", false, false));
 		possiede.add(new Possiede("Vigile del fuoco", "sconosciuto.boh@libero.it"));
 		possiede.add(new Possiede("Sorveglianza pubblica", "sconosciuto.boh@libero.it"));
+		
+		volontario.add(new Volontario("Castel San Pietro", "sconosciuto.due@libero.it", "asfdg", "sconosciuto", "due", "347432145", false, false));
+		possiede.add(new Possiede("Guidatore ambulanza", "sconosciuto.due@libero.it"));
 	}
 	
 	//return the system registered competences

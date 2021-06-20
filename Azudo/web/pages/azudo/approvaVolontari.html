@@ -35,13 +35,32 @@
 		var competenzeApprove= []; 
 		var defineCompetenzeApproveTable;
 		
+
+		var comitato;
+		function getComitato(){
+			$.ajax({
+				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					email: "giorgio.mocci@studio.unibo.it",
+					getComitato: true
+				},
+				success: function (Obj) {
+						console.log("ho ricevuto "+Obj);
+						comitato=Obj;
+				}
+			});
+		}
+		getComitato();
+		
 		function volontari(){
 			$.ajax({
 				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
 				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
 				type: 'post',
 				data: {
-					comitato: "Bologna",
+					comitato: comitato,
 					coordinatori: false
 				},
 				success: function(Obj){
@@ -66,6 +85,7 @@
 			});
 		}
 		volontari();
+		
 		
 		function aggiornaVolontari(){
 			noApprove = defineTable.defineNoApproveTable;
@@ -197,7 +217,7 @@
 		$(document).ready(function(){
 			
 			//comitato del coordinatore
-			$("#Comitato").html("<h2><b>COMITATO BOLOGNA</b></h2>");
+			$("#Comitato").html("<h2><b>Comitato "+comitato+"</b></h2>");
 
 			//deinisco le liste dei volontari e dei coordinatori
 			defineTable = new DefineTable($("#NoApproveTableCont"),noApprove,$("#ApproveTableCont"),approve,competenzeNoApprove,competenzeApprove);

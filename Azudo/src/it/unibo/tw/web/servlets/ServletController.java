@@ -59,6 +59,7 @@ public class ServletController extends HttpServlet {
 		String approve = request.getParameter("approve");
 
 		String getComitati = request.getParameter("getComitati");
+		String getComitato = request.getParameter("getComitato");
 		String setComitati = request.getParameter("setComitati");
 
 		String volontari = request.getParameter("volontari");
@@ -134,6 +135,8 @@ public class ServletController extends HttpServlet {
 				invioComitati.add(0, "");
 			}
 			out.write(g.toJson(invioComitati));
+		} else if (email != null && getComitato != null) {
+			out.write(DB.getVolontario(email).getComitato());
 		} else if (email != null && isApprove != null) {
 			Volontario v = DB.getVolontario(email);
 			System.out.println(isApprove);
@@ -243,7 +246,8 @@ public class ServletController extends HttpServlet {
 					for (Competenza c : com) {
 						competenze += c.getNome() + ", ";
 					}
-					competenze = competenze.substring(0, competenze.length() - 2);
+					if (competenze.length()>=2)competenze = competenze.substring(0, competenze.length() - 2);
+					
 					System.out.println(competenze);
 					System.out.println(v.getEmail());
 					volontarioCompetenze.add(new VolontarioCompetenze(v.getEmail(), v.getComitato(), competenze,
