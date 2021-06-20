@@ -198,7 +198,6 @@ public class DBConnection {
 		}
 		//elimino i comitati che al momento sono nel database, e che non sono nella nuova lista
 		for(Comitato C : comitato) {
-			//il comitato deve essere rimosso (ammesso che esista.. magari non lo troviamo perchè è nuovo, ma si pensiamo dopo a crearlo): espulsione di tutti i volontari dal comitato
 			boolean found = false;
 			for(it.azudo.model.volontario.Comitato NC : newComitati) {
 				if(NC.getNomeComitato().equals(C.getNome())) {
@@ -210,7 +209,8 @@ public class DBConnection {
 				List<Volontario> volontarioTmpRead = new ArrayList<>(volontario);
 				for(Volontario v : volontarioTmpRead) {
 					if(v.Comitato.equals(C.getNome())) {
-						volontario.remove(v);
+						v.setComitato("");
+						v.setApprove(Boolean.FALSE);
 					}
 				}
 			}

@@ -18,10 +18,24 @@
 	<script>
 		function DefineTable(){
 			//here request Ajax to server to see compatible plan
-			dim=5;
-			for (let i=1;i<=dim;i++ ){
-				document.getElementById("bodyTable").innerHTML+="<tr><tr><td>COMITATO "+i+"</td><td><a href=\"http://localhost:8080/MyTemplate/pages/azudo/gestioneCoordinatori.html\"> <button onclick=\"myFunction()\" type=\"button\" class=\"btn btn-secondary btn-sm\">Vai</button></a></td></tr></tr>";
-			}
+			
+			$.ajax({
+				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					getComitati: true
+				},
+				success: function(Obj){
+					Obj = JSON.parse(Obj);
+					for(var i = 0; i < Object.keys(Obj).length; i += 1){
+						console.log(Obj[i].nomeComitato);
+						document.getElementById("bodyTable").innerHTML+="<tr><tr><td>"+Obj[i].nomeComitato+"</td><td><a href=\"http://localhost:8080/MyTemplate/pages/azudo/gestioneCoordinatori.html?nomeComitato="+Obj[i].nomeComitato+"\"> <button type=\"button\" class=\"btn btn-secondary btn-sm\">Vai</button></a></td></tr></tr>";
+					}
+
+				}
+			});
+			
 			
 		}
 	</script>

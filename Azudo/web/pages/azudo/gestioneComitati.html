@@ -40,6 +40,7 @@
 						committees.push(Obj[i].nomeComitato);
 					}
 					console.log(committees);
+					
 					defineCommitteesTable = new DefineCommitteesTable($("#committeesTableCont"), committees);
 					defineCommitteesTable.renderCommitteesTable()
 				}
@@ -126,6 +127,7 @@
 			defineCommitteesTable.renderCommitteesTable()
 
 			$("#committeesManagement").submit(function(e){
+				$("#successDisplay").text("Invio avvenuto correttamente");
 				committees = defineCommitteesTable.defineCommitteesTable;
 				comitati(committees);
 				e.preventDefault();
@@ -170,6 +172,7 @@
 		<br>
 		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica"><br>
 		<p id="errorDisplay" style="color:red;"></p>
+		<p id="successDisplay" style="color:green;"></p>
 	</form>
 
 	<!--footer-->

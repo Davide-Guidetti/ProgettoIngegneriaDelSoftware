@@ -32,6 +32,10 @@ public class Volontario {
 		return this.Comitato;
 	}
 	
+	public void setComitato(String comitato) {
+		this.Comitato=comitato;
+	}
+	
 	public Boolean isApprove() {
 		return this.IsApprovato;
 	}

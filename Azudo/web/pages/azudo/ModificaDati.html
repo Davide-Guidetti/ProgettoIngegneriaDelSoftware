@@ -109,10 +109,8 @@
 				for ( var a=0, b=Obj.length;  a<b;  a++ ) {
 					testo += "<div class=\"custom-control custom-checkbox mb-3\">";
 					if (Obj[a].checked=="true"){
-						console.log(Obj[a].checked);
 						testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+a+"\" name=\""+Obj[a].nomeCompetenza+"\" checked>";
 					}else{
-						console.log(Obj[a].checked);
 						testo += "<input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck"+a+"\" name=\""+Obj[a].nomeCompetenza+"\">";
 					}
 					testo += "<label class=\"custom-control-label\" for=\"customCheck"+a+"\">"+Obj[a].nomeCompetenza+"</label>";
@@ -124,8 +122,34 @@
 			}
 		});
 		
+		//getComitati
+		$.ajax({
+			url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+			async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+			type: 'post',
+			data: {
+				getComitati: true,
+				email: "giorgio.mocci@studio.unibo.it"
+			},
+			success: function(Obj){
+				console.log(Obj);
+				Obj = JSON.parse(Obj);
+				
+				testo="<select class=\"custom-select\" id=\"comitato\"><option selected>"+Obj[0]+"</option>";
+				
+				  
+				for(var i = 1; i < Object.keys(Obj).length; i += 1){
+					testo+="<option value=\""+Obj[i]+"\">"+Obj[i]+"</option>";
+				}
+				testo+="</select>"
+				
+				$("#comitatiSelezionabili").html(testo);
+
+			}
+		});
+		
 		var comitato=$("#comitato").val();
-		console.log("comitato d'appartenenza "+comitato);
+		console.log("comitato d'appartenenza "+comitato+".");
 		$.ajax({
 			url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
 			type: 'post',
@@ -140,7 +164,11 @@
 						$("#isApproveComitato").css({'color':'green'});
 					}
 					else{
-						document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";
+						if (comitato==""){
+							document.getElementById("isApproveComitato").innerHTML="Non appartenente a nessun comitato";
+						}else{
+							document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";						
+						}
 						$("#isApproveComitato").css({'color':'red'});
 						$("#collapsibleNavbar").html("<ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");
 					}
@@ -219,7 +247,11 @@
 							$("#isApproveComitato").css({'color':'green'});
 						}
 						else{
-							document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";
+							if (comitato==""){
+								document.getElementById("isApproveComitato").innerHTML="Non appartenente a nessun comitato";
+							}else{
+								document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";						
+							}
 							$("#isApproveComitato").css({'color':'red'});
 							
 							//navbar di volontari non approvati
@@ -312,12 +344,8 @@
 					<div class="form-group">
 						<label for="website">Comitato di appartenenza</label>
 						<!--	<input type="url" class="form-control" id="website" placeholder="Bologna"> -->
-						<div class="dropdown">
-						  <select class="custom-select" id="comitato">
-						 	  <option selected>Bologna</option>
-							  <option value="Imola">Imola</option>
-						 	  <option value="Ravenna">Ravenna</option>
-						  </select>
+						<div class="dropdown" id="comitatiSelezionabili">
+						  
 						</div>
 						
 						<div id="isApproveComitato"></div>

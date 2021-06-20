@@ -79,10 +79,28 @@ public class ServletController extends HttpServlet {
 			String competenzeSistema[] = g.fromJson(Skills, String[].class);
 			DB.removePossiede(competenzeSistema);
 		}
-		
-
+	
+		if (email!=null && getComitati!=null) {
+			List<Comitato> comitati=DB.getComitati();
+			List<String> invioComitati=new ArrayList<>(); 
+			int controllo=0;
+			for (Comitato c:comitati) {
+				if (DB.getVolontario(email).getComitato().equals(c.getNomeComitato())) {
+					controllo=1;
+					invioComitati.add(0,c.getNomeComitato());
+				}
+				else {
+					invioComitati.add(c.getNomeComitato());
+				}
+			}
+			if (controllo==0) {
+				invioComitati.add(0,"");
+			}
+			out.write(g.toJson(invioComitati));
+		}else
 		if (email!=null && isApprove!=null) {
 			Volontario v=DB.getVolontario(email);
+			System.out.println(isApprove);
 			out.write(String.valueOf(v.controlloComitato(isApprove)));
 		}
 		else
