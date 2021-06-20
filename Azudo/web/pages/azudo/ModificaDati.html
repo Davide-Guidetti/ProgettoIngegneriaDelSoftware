@@ -177,6 +177,7 @@
 					}else{
 						document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";						
 					}
+					document.getElementById("role").innerHTML="";
 					$("#isApproveComitato").css({'color':'red'});
 					$("#collapsibleNavbar").html("<ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");
 				}
@@ -268,6 +269,7 @@
 						}else{
 							document.getElementById("isApproveComitato").innerHTML="Non approvato nel comitato";						
 						}
+						document.getElementById("role").innerHTML="";
 						$("#isApproveComitato").css({'color':'red'});
 						$("#collapsibleNavbar").html("<ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"navbar-brand\">Profilo</a></li></ul>");
 					}
@@ -306,7 +308,7 @@
 		<div class="card-body">
 			<div class="account-settings">
 				<div class="user-profile">
-					<img src="../../images/Azudu.png" alt="Logo" >
+					<img style = "position:relative; right:22px;" src="../../images/Azudu.png" alt="Logo" >
 					<br><br>
 					<h5 class="user-name">    Giorgio Mocci</h5>
 					<h6 class="user-email">   giorgio.mocci@studio.unibo.it</h6>
