@@ -21,29 +21,30 @@
 	</style>
 	
 	<script>
-		var committees = ["Bologna", "Imola", "Ravenna"]; //QUI IL SERVER DEVE INSERIRE I COMITATI GIA' ESISTENTI
+		var committees = []; //QUI IL SERVER DEVE INSERIRE I COMITATI GIA' ESISTENTI
 		var defineCommitteesTable;
 		
-		function comitati(){
+		function comitati(committeesParam){
 			$.ajax({
 				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
 				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
 				type: 'post',
 				data: {
-					comitatoRequest="true"
+					getComitati: true,
+					setComitati: (committeesParam==undefined) ? null : JSON.stringify(committeesParam)
 				},
 				success: function(Obj){
 					Obj = JSON.parse(Obj);
-					console.log(Obj);
-					console.log( Object.keys(Obj).length);
+					committees = [];
 					for(var i = 0; i < Object.keys(Obj).length; i += 1){
-						console.log(Obj[i]);
-						Skills.push(Obj[i]);
+						committees.push(Obj[i].nomeComitato);
 					}
+					console.log(committees);
+					defineCommitteesTable = new DefineCommitteesTable($("#committeesTableCont"), committees);
+					defineCommitteesTable.renderCommitteesTable()
 				}
 			});
 		}
-		competenze();
 
 		function DefineCommitteesTable(jqeryHtmlContainerBox, committees){
 			this.defineCommitteesTable = committees;
@@ -51,19 +52,12 @@
 			
 			//remove an element
 			this.remove = function(index){
-				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE L'INTERA LISTA SOLO QUANDO SI CLICCA SU APPLICA ----------------
-				let TrElem = this.jqeryHtmlContainerBox.find("tr[elementRowIndex=" + index + "]");
-				let name = TrElem.children().text(); //first td elemnt of table, and first and only elment of this cell witch is the input field for element name
-				sendDeleteRequest(name);
-				//-----------------------------------------------------------------------------------------------------------------------------
-				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE VOLTA PER L'AGGIUNTA E LA RIMOZIONE DI UN COMITATO ----------------
 				let newDefineCommitteesTable = [];
 				for(let i=0; i<this.defineCommitteesTable.length; i++){
 					if(i!=index) newDefineCommitteesTable.push(this.defineCommitteesTable[i]);
 				}
 				this.defineCommitteesTable = newDefineCommitteesTable;
 				this.renderCommitteesTable();
-				//--------------------------------------------------------------------------------------------------------------------------------
 			}
 			//add an element
 			this.add = function(name){
@@ -72,13 +66,8 @@
 						return false;
 					}
 				}
-				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE L'INTERA LISTA SOLO QUANDO SI CLICCA SU APPLICA ----------------
-				sendAddRequest(name);
-				//-----------------------------------------------------------------------------------------------------------------------------
-				//------------ RIMUOVERE QUESTA PARTE SE SI DECIDE DI MANDARE VOLTA PER L'AGGIUNTA E LA RIMOZIONE DI UN COMITATO ----------------
 				this.defineCommitteesTable.push(name);
 				this.renderCommitteesTable();
-				//--------------------------------------------------------------------------------------------------------------------------------
 				return true;
 			}
 			//displays the list of elements in table
@@ -132,12 +121,13 @@
 		
 		//define table
 		$(document).ready(function(){
+			comitati();
 			defineCommitteesTable = new DefineCommitteesTable($("#committeesTableCont"), committees);
 			defineCommitteesTable.renderCommitteesTable()
 
 			$("#committeesManagement").submit(function(e){
 				committees = defineCommitteesTable.defineCommitteesTable;
-				sendNewList(committees);
+				comitati(committees);
 				e.preventDefault();
 				return false;
 			});

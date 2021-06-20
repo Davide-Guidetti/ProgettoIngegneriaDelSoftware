@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import it.azudo.model.volontario.Comitato;
 import it.azudo.model.volontario.Competenza;
 import it.azudo.DBObjects.DBConnection;
 import it.azudo.DBObjects.Volontario;
@@ -60,6 +61,8 @@ public class ServletController extends HttpServlet {
 		String noApprove=request.getParameter("noApprove");
 		String approve=request.getParameter("approve");
 		
+		String getComitati=request.getParameter("getComitati");
+		String setComitati=request.getParameter("setComitati");
 		
 		if (noApprove!=null || approve!=null) {
 			String volontariNoApprove [] =g.fromJson(noApprove, String[].class);
@@ -131,6 +134,16 @@ public class ServletController extends HttpServlet {
 				Volontario v=DB.getVolontario(email);
 				v.setNumeroTelefono(phone);
 			}
+			
+		} else if( getComitati != null || setComitati != null ){
+			if(setComitati != null && setComitati.length() != 0) {
+				String comitStr[] = g.fromJson(setComitati, String[].class);
+				List<Comitato> comit = new ArrayList<Comitato>();
+				for (int i = 0; i < comitStr.length; i++)
+					comit.add(new Comitato(comitStr[i]));
+				DB.setComitati(comit);
+			}
+			out.write(g.toJson(DB.getComitati().toArray()));
 			
 		} else {
 			// prendi la stringa con il comitato al suo interno, se vuota vuol dire che devo

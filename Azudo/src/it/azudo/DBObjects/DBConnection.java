@@ -29,6 +29,11 @@ public class DBConnection {
 		competenze = new ArrayList<>();
 		volontario = new ArrayList<>();
 		possiede = new ArrayList<>();
+		comitato = new ArrayList<>();
+		
+		comitato.add(new Comitato("Bologna"));
+		comitato.add(new Comitato("Castel san pietro"));
+		comitato.add(new Comitato("Castel guelfo"));
 		
 		competenze.add(new Competenza("Guidatore ambulanza"));
 		competenze.add(new Competenza("Sorveglianza pubblica"));
