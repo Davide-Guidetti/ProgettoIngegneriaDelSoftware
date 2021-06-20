@@ -127,9 +127,9 @@
 
 			//displays the list of elements in table
 			this.renderVolunteerTable = function(){		
-				let table = $('<table class="col-lg-5 col-sm-4">');
+				let table = $('<table class="col-lg-7 col-sm-4">');
 				let row;
-				table.append($('<tr>').html('<th>Email volontari</th><th>Azione</th>'));
+				table.append($('<tr>').html('<th>Email volontari (approvati e non approvati nel comitato)</th><th>Azione</th>'));
 				
 				console.log("Volunteer:");
 				for(let i=0; i<this.defineVolunteerTable.length; i++){
@@ -151,7 +151,7 @@
 
 			//displays the list of elements in table
 			this.renderCoordinatorsTable = function(){
-				let table = $('<table class="col-lg-5 col-sm-4">');
+				let table = $('<table class="col-lg-7 col-sm-4">');
 				let row;
 				table.append($('<tr>').html('<th>Email coordinatore</th><th>Azione</th>'));
 				
