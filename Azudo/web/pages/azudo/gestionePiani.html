@@ -16,13 +16,55 @@
 	<script type="text/javascript" src="jquery-v3.5.1.min.js"></script>
 	
 	<script>
+		var comitato;
+		function getComitato(){
+			$.ajax({
+				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					email: "giorgio.mocci@studio.unibo.it",
+					getComitato: true
+				},
+				success: function (Obj) {
+						console.log("ho ricevuto "+Obj);
+						comitato=Obj;
+				}
+			});
+		}
+		getComitato();
+	
+	
 		function DefineTable(){
 			//here request Ajax to server to see compatible plan
+			
+			$.ajax({
+				url: '/MyTemplate/servletcontroller', //server per effettuare la query dei volontari in base alle competenze
+				type: 'post',
+				data: {
+					email: "giorgio.mocci@studio.unibo.it",
+					isApprove: comitato
+				},
+				success: function (Obj) {
+						console.log("isApprove "+Obj.split(",")[0]+" "+Obj.split(",")[1]);
+						if (Obj.split(",")[0] == "true"){					
+							if (Obj.split(",")[1] == "false"){ //non è coordinatore
+								$("#collapsibleNavbar").html("<ul class=\"navbar-nav\"><li class=\"nav-item\"><a class=\"navbar-brand\">Piani compatibili</a></li></ul><ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/ModificaDati.html\">Profilo</a></li></ul>");
+							}else{ //è un coordinatore
+								$("#collapsibleNavbar").html("<ul class=\"navbar-nav\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/PannelloGestionePiani.html\">Pannello gestione piani</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/approvaVolontari.html\">Gestione volontari comitato</a></li><li class=\"nav-item\"><a class=\"navbar-brand\">Piani compatibili</a></li><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/listaVolontari.html\">Lista volontari</a></li></ul><ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/ModificaDati.html\">Profilo</a></li></ul>");								
+							}
+						}
+						else{ //non è approvato
+							$("#collapsibleNavbar").html("<ul class=\"navbar-nav ml-auto\"><li class=\"nav-item\"><a class=\"nav-link\" href=\"http://localhost:8080/MyTemplate/pages/azudo/ModificaDati.html\">Profilo</a></li></ul>");
+						}
+				}
+			});
+			
 			dim=5;
 			for (let i=1;i<=dim;i++ ){
 				document.getElementById("bodyTable").innerHTML+="<tr><tr><td>PIANO "+i+"</td><td><a href=\"http://localhost:8080/MyTemplate/pages/azudo/partecipaPiano.html\"> <button onclick=\"myFunction()\" type=\"button\" class=\"btn btn-secondary btn-sm\">Vai</button></a></td></tr></tr>";
 			}
-			
+
 		}
 	</script>
 
@@ -40,26 +82,6 @@
 		<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
-		<ul class="navbar-nav">
-		    <li class="nav-item">
-			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/PannelloGestionePiani.html">Pannello gestione piani</a>
-			</li>
-			<li class="nav-item">
-			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/approvaVolontari.html">Gestione volontari comitato</a>
-			</li>
-			<li class="nav-item">
-			<a class="navbar-brand">Piani compatibili</a>
-			</li>
-			<li class="nav-item">
-			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/listaVolontari.html">Lista volontari</a>
-			</li>
-		</ul>
-		<ul class="navbar-nav ml-auto">
-			<li class="nav-item">
-			<a class="nav-link" href="http://localhost:8080/MyTemplate/pages/azudo/ModificaDati.html">Profilo</a>
-		</li>
-		</ul>
-			
 		</div>  
 	</nav>
 	<br>

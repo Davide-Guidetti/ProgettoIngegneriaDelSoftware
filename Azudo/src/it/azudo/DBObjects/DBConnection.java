@@ -53,7 +53,7 @@ public class DBConnection {
 		possiede.add(new Possiede("Vigile del fuoco", "sconosciuto.boh@libero.it"));
 		possiede.add(new Possiede("Sorveglianza pubblica", "sconosciuto.boh@libero.it"));
 		
-		volontario.add(new Volontario("Castel San Pietro", "sconosciuto.due@libero.it", "asfdg", "sconosciuto", "due", "347432145", false, false));
+		volontario.add(new Volontario("Castel San Pietro", "sconosciuto.due@libero.it", "asfdg", "sconosciuto", "due", "3475417237", false, false));
 		possiede.add(new Possiede("Guidatore ambulanza", "sconosciuto.due@libero.it"));
 	}
 	
