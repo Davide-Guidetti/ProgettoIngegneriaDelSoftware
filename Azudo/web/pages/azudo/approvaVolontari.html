@@ -42,9 +42,9 @@
 				type: 'post',
 				data: {
 					comitato: "Bologna",
+					coordinatori: false
 				},
 				success: function(Obj){
-					console.log(Obj);
 					Obj = JSON.parse(Obj);
 					for ( var a=0, b=Obj.length;  a<b;  a++ ) {
 						if (Obj[a].isApprove=="true"){
@@ -80,7 +80,6 @@
 				},
 				success: function(Obj){
 					Obj = JSON.parse(Obj);
-					console.log(Obj);
 					$("#successDisplay").text("Invio avvenuto correttamente");
 				}
 			});

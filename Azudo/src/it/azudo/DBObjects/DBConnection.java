@@ -95,7 +95,19 @@ public class DBConnection {
 	}
 	
 	//restituisce i volontari approvati o in attesa di approvazione di un comitato non coordinatori
-	public List<Volontario> getVolontariCoordinatoriComitato(String comitato) {
+		public List<Volontario> getVolontariCoordinatoriComitato(String comitato) {
+			List<Volontario> volontari = new ArrayList<>();
+			for(Volontario v : volontario) {
+				if(v.Comitato.equals(comitato) ) {
+					volontari.add(v);
+				}
+			}
+			return volontari;
+		}
+		
+	
+	//restituisce i volontari approvati o in attesa di approvazione di un comitato non coordinatori
+	public List<Volontario> getVolontariNoCoordinatoriComitato(String comitato) {
 		List<Volontario> volontari = new ArrayList<>();
 		for(Volontario v : volontario) {
 			if(v.Comitato.equals(comitato)  && !v.IsCoordinatore) {

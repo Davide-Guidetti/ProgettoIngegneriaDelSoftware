@@ -50,64 +50,97 @@ public class ServletController extends HttpServlet {
 		// restituzione competenza volontario
 		String email = request.getParameter("email");
 
-		
-		//controllo approvazione 
-		String isApprove=request.getParameter("isApprove");
-		
-		
-		String Skills=request.getParameter("Skills");
-		
-		
-		String noApprove=request.getParameter("noApprove");
-		String approve=request.getParameter("approve");
-		
-		String getComitati=request.getParameter("getComitati");
-		String setComitati=request.getParameter("setComitati");
-		
-		if (noApprove!=null || approve!=null) {
-			String volontariNoApprove [] =g.fromJson(noApprove, String[].class);
-			String volontariApprove [] =g.fromJson(approve, String[].class);
-			for (String v:volontariNoApprove) {
+		// controllo approvazione
+		String isApprove = request.getParameter("isApprove");
+
+		String Skills = request.getParameter("Skills");
+
+		String noApprove = request.getParameter("noApprove");
+		String approve = request.getParameter("approve");
+
+		String getComitati = request.getParameter("getComitati");
+		String setComitati = request.getParameter("setComitati");
+
+		String volontari = request.getParameter("volontari");
+		String coordinatori = request.getParameter("coordinatori");
+
+		if (volontari != null || coordinatori != null) {
+			String volontariComitato[];
+			if (volontari==null) {
+				volontariComitato=new String[0];
+			}else {
+				volontariComitato= g.fromJson(volontari, String[].class);
+			}
+			
+			String coordinatoriComitato[];
+			if (volontari==null) {
+				coordinatoriComitato=new String[0];
+			}else {
+				coordinatoriComitato = g.fromJson(coordinatori, String[].class);
+			}
+			 
+			
+			for (String v : volontariComitato) {
+				DB.getVolontario(v).setCoordinatore(Boolean.FALSE);
 				DB.getVolontario(v).setApprove(Boolean.FALSE);
 			}
-			for (String v:volontariApprove) {
+			for (String v : coordinatoriComitato) {
+				DB.getVolontario(v).setCoordinatore(Boolean.TRUE);
 				DB.getVolontario(v).setApprove(Boolean.TRUE);
 			}
 		}
-		
-		if (Skills!=null) {
+
+		if (noApprove != null || approve != null) {
+			String volontariNoApprove[];
+			if (noApprove==null) {
+				volontariNoApprove=new String[0];
+			}else {
+				volontariNoApprove= g.fromJson(noApprove, String[].class);
+			}
+			
+			String volontariApprove[];
+			if (approve==null) {
+				volontariApprove=new String[0];
+			}else {
+				volontariApprove= g.fromJson(approve, String[].class);
+			}
+			
+			for (String v : volontariNoApprove) {
+				DB.getVolontario(v).setApprove(Boolean.FALSE);
+			}
+			for (String v : volontariApprove) {
+				DB.getVolontario(v).setApprove(Boolean.TRUE);
+			}
+		}
+
+		if (Skills != null) {
 			String competenzeSistema[] = g.fromJson(Skills, String[].class);
 			DB.removePossiede(competenzeSistema);
 		}
-	
-		if (email!=null && getComitati!=null) {
-			List<Comitato> comitati=DB.getComitati();
-			List<String> invioComitati=new ArrayList<>(); 
-			int controllo=0;
-			for (Comitato c:comitati) {
+
+		if (email != null && getComitati != null) {
+			List<Comitato> comitati = DB.getComitati();
+			List<String> invioComitati = new ArrayList<>();
+			int controllo = 0;
+			for (Comitato c : comitati) {
 				if (DB.getVolontario(email).getComitato().equals(c.getNomeComitato())) {
-					controllo=1;
-					invioComitati.add(0,c.getNomeComitato());
-				}
-				else {
+					controllo = 1;
+					invioComitati.add(0, c.getNomeComitato());
+				} else {
 					invioComitati.add(c.getNomeComitato());
 				}
 			}
-			if (controllo==0) {
-				invioComitati.add(0,"");
+			if (controllo == 0) {
+				invioComitati.add(0, "");
 			}
 			out.write(g.toJson(invioComitati));
-		}else
-		if (email!=null && isApprove!=null) {
-			Volontario v=DB.getVolontario(email);
+		} else if (email != null && isApprove != null) {
+			Volontario v = DB.getVolontario(email);
 			System.out.println(isApprove);
 			out.write(String.valueOf(v.controlloComitato(isApprove)));
-		}
-		else
-		if (email != null) {
+		} else if (email != null) {
 			String listCompetenze = request.getParameter("listCompetenze");
-			
-			
+
 			if (listCompetenze != null) {
 				// salvataggio nel volontario delle competenze checked
 				System.out.println(email + listCompetenze);
@@ -142,19 +175,17 @@ public class ServletController extends HttpServlet {
 
 				out.write(g.toJson(check.toArray()));
 			}
-			
-			
-			
-			//controllo numero di telefono
+
+			// controllo numero di telefono
 			String phone = request.getParameter("phone");
-			if (phone!=null) {
-				System.out.println("phone: "+phone);
-				Volontario v=DB.getVolontario(email);
+			if (phone != null) {
+				System.out.println("phone: " + phone);
+				Volontario v = DB.getVolontario(email);
 				v.setNumeroTelefono(phone);
 			}
-			
-		} else if( getComitati != null || setComitati != null ){
-			if(setComitati != null && setComitati.length() != 0) {
+
+		} else if (getComitati != null || setComitati != null) {
+			if (setComitati != null && setComitati.length() != 0) {
 				String comitStr[] = g.fromJson(setComitati, String[].class);
 				List<Comitato> comit = new ArrayList<Comitato>();
 				for (int i = 0; i < comitStr.length; i++)
@@ -162,7 +193,7 @@ public class ServletController extends HttpServlet {
 				DB.setComitati(comit);
 			}
 			out.write(g.toJson(DB.getComitati().toArray()));
-			
+
 		} else {
 			// prendi la stringa con il comitato al suo interno, se vuota vuol dire che devo
 			// restituire le competenze
@@ -171,8 +202,7 @@ public class ServletController extends HttpServlet {
 			if (Comitato == null && email == null)// restituisco array competenze
 			{
 				out.write(g.toJson(competenze.toArray()));
-			} 
-			else if (Comitato != null && JSONStr!=null){
+			} else if (Comitato != null && JSONStr != null) {
 				System.out.println(JSONStr);
 				String competStr[] = g.fromJson(JSONStr, String[].class);
 				List<Competenza> comp = new ArrayList<Competenza>();
@@ -198,24 +228,29 @@ public class ServletController extends HttpServlet {
 					out.write(g.toJson(volontariCompatibili.toArray()));
 				}
 
-			}
-			else if (Comitato!=null) {
-				
-				List<Volontario> volontariComitato=DB.getVolontariCoordinatoriComitato(Comitato);
-				List<VolontarioCompetenze> volontarioCompetenze=new ArrayList<>();
-				String competenze="";
-				
-				for (Volontario v: volontariComitato) {
-					List<Competenza> com=DB.getCompetenzeVolotnario(v.getEmail());
-					for (Competenza c: com) {
-						competenze+=c.getNome()+", ";
+			} else if (Comitato != null) {
+				List<Volontario> volontariComitato = new ArrayList<>();
+				if (Boolean.valueOf(request.getParameter("coordinatori"))) {
+					volontariComitato = DB.getVolontariCoordinatoriComitato(Comitato);
+				} else {
+					volontariComitato = DB.getVolontariNoCoordinatoriComitato(Comitato);
+				}
+				List<VolontarioCompetenze> volontarioCompetenze = new ArrayList<>();
+				String competenze = "";
+
+				for (Volontario v : volontariComitato) {
+					List<Competenza> com = DB.getCompetenzeVolotnario(v.getEmail());
+					for (Competenza c : com) {
+						competenze += c.getNome() + ", ";
 					}
 					competenze = competenze.substring(0, competenze.length() - 2);
 					System.out.println(competenze);
-					volontarioCompetenze.add(new VolontarioCompetenze(v.getEmail(),v.getComitato(), competenze, v.isApprove().toString()));
-					competenze="";
+					System.out.println(v.getEmail());
+					volontarioCompetenze.add(new VolontarioCompetenze(v.getEmail(), v.getComitato(), competenze,
+							v.isApprove().toString(), v.isCoordinatore().toString()));
+					competenze = "";
 				}
-				
+
 				out.write(g.toJson(volontarioCompetenze.toArray()));
 			}
 		}

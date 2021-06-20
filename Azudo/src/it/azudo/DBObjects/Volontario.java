@@ -24,6 +24,10 @@ public class Volontario {
 		IsApprovato = isApprovato;
 	}
 	
+	public Boolean isCoordinatore() {
+		return this.IsCoordinatore;
+	}
+	
 	public String getEmail() {
 		return this.EMail;		
 	}
@@ -48,6 +52,10 @@ public class Volontario {
 		return this.NumeroTelefono;		
 	}
 	
+	public void setCoordinatore(Boolean result) {
+		this.IsCoordinatore=result;
+	}
+	
 	public boolean controlloComitato(String comitato) {
 		if (this.Comitato.equals(comitato) && IsApprovato==true) {
 			return true;
@@ -55,6 +63,7 @@ public class Volontario {
 		if (!this.Comitato.equals(comitato)) {
 			this.Comitato=comitato;
 			IsApprovato=false;
+			IsCoordinatore=false;
 		}
 		return false;
 	}

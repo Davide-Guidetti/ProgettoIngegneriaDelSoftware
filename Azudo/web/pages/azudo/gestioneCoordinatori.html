@@ -22,13 +22,67 @@
 	
 	<script>
 		var defineTable;
+		
 
-		var coordinators = ["coordinatore1", "coordinatore2"]; //QUI IL SERVER DEVE INSERIRE I COORDINATORI GIA' ESISTENTI
+		var coordinators = []; //QUI IL SERVER DEVE INSERIRE I COORDINATORI GIA' ESISTENTI
 		var defineCoordinatorsTable;
 
-		var volunteer = ["volunteer1", "volunteer2"]; //QUI IL SERVER DEVE INSERIRE I COORDINATORI GIA' ESISTENTI
+		var volunteer = []; //QUI IL SERVER DEVE INSERIRE I COORDINATORI GIA' ESISTENTI
 		var defineVolunteerTable;
 	
+		
+		const urlParams = new URLSearchParams(window.location.search);
+		const comitato = urlParams.get('nomeComitato');
+		console.log(comitato);
+		
+		function volontari(){
+			$.ajax({
+				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					comitato: comitato,
+					coordinatori: true
+				},
+				success: function(Obj){
+					console.log(Obj);
+					Obj = JSON.parse(Obj);
+					for ( var a=0, b=Obj.length;  a<b;  a++ ) {
+						if (Obj[a].isCoordinatore=="true"){
+							console.log("true");
+							console.log(Obj[a].email);
+							coordinators.push(Obj[a].email);
+						}else{
+							console.log("false");
+							console.log(Obj[a].email);
+							volunteer.push(Obj[a].email);
+						}
+					}
+					
+				}
+			});
+		}
+		volontari();
+		
+		function aggiornaCoordinatori(){
+			volunteer = defineTable.defineVolunteerTable;
+			coordinators = defineTable.defineCoordinatorsTable;
+			$.ajax({
+				url: "/MyTemplate/servletcontroller", //server per richiedere la lista di competenze presenti
+				async: false, //non rende asincrona la richiesta, in questo modo si caricano correttamente le competenze
+				type: 'post',
+				data: {
+					volontari : JSON.stringify(volunteer),
+					coordinatori : JSON.stringify(coordinators)
+				},
+				success: function(Obj){
+					Obj = JSON.parse(Obj);
+					$("#successDisplay").text("Invio avvenuto correttamente");
+				}
+			});
+		}
+		
+		
 		
 		//function definition table
 		function DefineTable(jqeryHtmlContainerBoxVolunteer,volunteer,jqeryHtmlContainerBoxCoordinators, coordinators){
@@ -73,9 +127,9 @@
 
 			//displays the list of elements in table
 			this.renderVolunteerTable = function(){		
-				let table = $('<table class="col-lg-3 col-sm-4">');
+				let table = $('<table class="col-lg-5 col-sm-4">');
 				let row;
-				table.append($('<tr>').html('<th>Nome volontari</th><th>Azione</th>'));
+				table.append($('<tr>').html('<th>Email volontari</th><th>Azione</th>'));
 				
 				console.log("Volunteer:");
 				for(let i=0; i<this.defineVolunteerTable.length; i++){
@@ -97,9 +151,9 @@
 
 			//displays the list of elements in table
 			this.renderCoordinatorsTable = function(){
-				let table = $('<table class="col-lg-3 col-sm-4">');
+				let table = $('<table class="col-lg-5 col-sm-4">');
 				let row;
-				table.append($('<tr>').html('<th>Nome coordinatore</th><th>Azione</th>'));
+				table.append($('<tr>').html('<th>Email coordinatore</th><th>Azione</th>'));
 				
 				console.log("Coordinators:");
 				for(let i=0; i<this.defineCoordinatorsTable.length; i++){
@@ -124,7 +178,7 @@
 		$(document).ready(function(){
 			
 			//nome comitato selezionato in precedenza dall'amministratore
-			$("#Comitato").html("<h2><b>COMITATO X</b></h2>");
+			$("#Comitato").html("<h2><b>"+comitato+"</b></h2>");
 
 			//deinisco le liste dei volontari e dei coordinatori
 			defineTable = new DefineTable($("#VolunteerTableCont"),volunteer,$("#CoordinatorsTableCont"),coordinators);
@@ -132,11 +186,6 @@
 			defineTable.renderCoordinatorsTable();
 
 			$("#Management").submit(function(e){
-				volunteer = defineTable.defineVolunteerTable;
-				coordinators = defineTable.defineCoordinatorsTable;
-
-				sendNewList(volunteer);
-				sendNewList(coordinators);
 				e.preventDefault();
 				return false;
 			});
@@ -186,7 +235,8 @@
 		<br>
 		<div id="VolunteerTableCont"></div>
 		<br>
-		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica"><br>
+		<input type="submit" class="btn btn-primary btn-sm mr-1" value="Applica" onclick="aggiornaCoordinatori()"><br>
+		<p id="successDisplay" style="color:green;"></p>
 	</form>
 
 	<!--footer-->
